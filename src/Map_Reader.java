@@ -2,12 +2,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-public class Map_To_Array {
+public class Map_Reader {
     private static char dark_void = '@';
     private static char tree = 'T';
     private static char free_pass = '.';
 
-    public static int[][] map_To_Array(File file){
+    public static int[][] readMap(File file){
         int[][] array=null;
         try {
             FileReader fileReader=new FileReader(file);

@@ -1,14 +1,14 @@
-public class Graph_Genarator {
+public class Graph_Generator {
     private int[][] array;
     private Graph graph;
     private int free_pass = 0;
     private int wall = 1;
 
-    public Graph_Genarator(int[][] array) {
+    public Graph_Generator(int[][] array) {
         this.array = array;
     }
 
-    public Graph Graph_From_Array(){
+    public Graph generate(){
 
         graph=new Graph();
         int count;
