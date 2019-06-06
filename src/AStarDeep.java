@@ -8,6 +8,16 @@ public class AStarDeep implements ISearcher {
     private List<SearchingVertex> finished;
 
     @Override
+    public List<Path> searchIteratively(AProblem problem, double minCost, double costJump, double maxCost) {
+        for (double currCost = minCost; currCost <= maxCost; currCost += costJump) {
+            List<Path> paths = search(problem, currCost);
+            if(paths != null)
+                return paths;
+        }
+        return null; //There is no more
+    }
+
+    @Override
     public List<Path> search(AProblem problem, double max_cost) {
         this.problem = problem;
         this.max_cost = max_cost;
