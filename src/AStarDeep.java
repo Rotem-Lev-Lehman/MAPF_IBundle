@@ -16,16 +16,16 @@ public class AStarDeep implements ISearcher, IDeepeningSearcher {
                 return paths;
         }
         return null; //There is no more*/
-        return searchBFS(problem,minCost,max_cost,true);
+        return searchBFS(problem,minCost,maxCost,true);
     }
 
     @Override
     public List<Path> search(AProblem problem, double maxCost) {
-        return searchBFS(problem,0,max_cost,false);
+        return searchBFS(problem,0,maxCost,false);
     }
 
 
-    private List<Path> searchBFS(AProblem problem, double min_cost,double max_cost,boolean deepening) {
+    private List<Path> searchBFS(AProblem problem, double min_cost, double max_cost, boolean deepening) {
         this.problem = problem;
         this.max_cost = max_cost;
         open = new PriorityQueue<>();
@@ -50,7 +50,7 @@ public class AStarDeep implements ISearcher, IDeepeningSearcher {
                         return reconstructPaths();
                     }
                 }
-                else if(curr.getF()>min_cost){
+                else if(curr.getF()>=min_cost){
                     finished.add(curr);
                 }
                 continue;

@@ -24,8 +24,8 @@ public class Main {
         List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest1"));
         int breakpoint=5;
 
-        ISearcher astar = new AStarDeep();
-        List<Path> paths = astar.search(scenarios.get(0).getAgents().get(0),4);
+        AStarDeep astar = new AStarDeep();
+        List<Path> paths = astar.searchDeepening(scenarios.get(0).getAgents().get(0),4,6);
         for(Path path : paths)
         {
             System.out.println("***************************************************");
