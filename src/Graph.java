@@ -19,6 +19,10 @@ public class Graph {
         return vertexes.values();
     }
 
+    public boolean locationExists(Location_Indicator location_indicator){
+        return vertexes.containsKey(location_indicator);
+    }
+
     public double getLowest_cost() {
         return lowest_cost;
     }

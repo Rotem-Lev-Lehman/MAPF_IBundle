@@ -25,7 +25,7 @@ public class Main {
         int breakpoint=5;
 
         ISearcher astar = new AStarDeep();
-        List<Path> paths = astar.search(scenarios.get(0).getAgents().get(0),10);
+        List<Path> paths = astar.search(scenarios.get(0).getAgents().get(0),4);
         for(Path path : paths)
         {
             System.out.println("***************************************************");
