@@ -12,7 +12,7 @@ public class Main {
         System.out.println(graph.getVertexes().size());
         System.out.println("----------------------");
         //test map to array
-        int[][] array= Map_Reader.readMap(new File("E:\\stiven\\Documents\\Coding\\Java\\MAPF_IBundle\\src\\test"));
+        int[][] array= Map_Reader.readMap(new File("resources/maps/test"));
         for(int i=0;i<array.length;i++){
             for(int j=0;j<array[i].length;j++){
                 System.out.print(array[i][j]);
