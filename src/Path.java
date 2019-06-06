@@ -1,11 +1,11 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Path {
     List<Vertex> vertexes;
 
     public Path() {
-        this.vertexes = new LinkedList<>();
+        this.vertexes = new ArrayList<>();
     }
 
     public List<Vertex> getVertexes() {
@@ -29,5 +29,13 @@ public class Path {
         for(Vertex vertex : vertexes){
             System.out.println(vertex);
         }
+    }
+
+    public int size() {
+        return vertexes.size();
+    }
+
+    public Vertex get(int index){
+        return vertexes.get(index);
     }
 }
