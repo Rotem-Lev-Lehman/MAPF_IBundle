@@ -16,13 +16,24 @@ public class Graph_Generator {
             for(int column=0;column<array[row].length;column++){
                 if(array[row][column]==free_pass){
                     Point point = new Point(column,row);
-                    Vertex vertex=new Vertex(graph,point);
+                    Vertex vertex = addVertex(point);
                     addEdges(vertex,row,column);
-                    graph.addVertex(vertex);
                 }
             }
         }
         return graph;
+    }
+
+    private Vertex addVertex( Point point) {
+        Vertex ans;
+        if(graph.locationExists(point)==false){
+            ans = new Vertex(graph,point);
+            graph.addVertex(ans);
+        }
+        else{
+            ans = graph.get_Vertex_By_Indicator(point);
+        }
+        return ans;
     }
 
     private void addEdges(Vertex vertex, int row, int column) {
@@ -40,7 +51,7 @@ public class Graph_Generator {
         if(inArray(row,column)){
             if(array[row][column]==free_pass){
                 Point point = new Point(column,row);
-                Vertex to = new Vertex(graph,point);
+                Vertex to = addVertex(point);
                 Edge edge = new Edge(graph,from,to);
                 from.addEdge(edge);
             }
