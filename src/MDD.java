@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MDD{
     private Graph original_graph;
@@ -8,21 +9,26 @@ public class MDD{
     private MDD_Vertex start_MDD_vertex;
     private double bidding_cost;
     private double MDD_cost;
+    //private Map<Integer, List<MDD_Vertex>>
 
     public MDD(Graph original_graph, Vertex start_vertex, double bidding_cost) {
         this.original_graph = original_graph;
-        this.start_MDD_vertex = new MDD_Vertex(start_vertex, this, 0);
+        //this.start_MDD_vertex = new MDD_Vertex(start_vertex, this, 0);
+        this.start_MDD_vertex = null;
         this.bidding_cost = bidding_cost;
         mdd_edges = new ArrayList<>();
         mdd_vertexes = new ArrayList<>();
+        MDD_cost = 0;
     }
 
     public MDD(Graph original_graph, Vertex start_vertex) {
         this.original_graph = original_graph;
-        this.start_MDD_vertex = new MDD_Vertex(start_vertex, this, 0);
+        //this.start_MDD_vertex = new MDD_Vertex(start_vertex, this, 0);
+        this.start_MDD_vertex = null;
         bidding_cost = 0;
         mdd_edges = new ArrayList<>();
         mdd_vertexes = new ArrayList<>();
+        MDD_cost = 0;
     }
 
     public double getBidding_cost() {
