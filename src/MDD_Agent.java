@@ -3,9 +3,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MDDAgent extends Agent {
+public class MDD_Agent extends Agent {
     private List<MDD> current_MDDs;
-    public MDDAgent(Graph graph, Vertex start, Vertex goal) {
+    public MDD_Agent(Graph graph, Vertex start, Vertex goal) {
         super(graph, start, goal);
         current_MDDs = new ArrayList<>();
     }

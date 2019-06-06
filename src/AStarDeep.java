@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class AStarDeep implements ISearcher, IDeepeningSearcher {
+public class AStarDeep implements ISearcher, IDeepening_Searcher {
 
     private PriorityQueue<SearchingVertex> open;
     private double max_cost;

@@ -1,15 +1,15 @@
 import java.util.List;
 
 public class Bid {
-    private Agent agent;
+    private MDD_Agent agent;
     private List<MDD> MDDs;
 
-    public Bid(Agent agent, List<MDD> MDDs) {
+    public Bid(MDD_Agent agent, List<MDD> MDDs) {
         this.agent = agent;
         this.MDDs = MDDs;
     }
 
-    public Agent getAgent() {
+    public MDD_Agent getAgent() {
         return agent;
     }
 
