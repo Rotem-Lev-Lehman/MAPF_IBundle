@@ -34,6 +34,9 @@ public class Scenario_Reader {
                 Point goal = new Point(Integer.parseInt(data[6]),Integer.parseInt(data[7]));
                 agents.add(new Agent(graph,graph.get_Vertex_By_Indicator(start),graph.get_Vertex_By_Indicator(goal)));
             }
+            if(graph != null && agents != null){
+                scenarios.add(new Scenario(graph,agents));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,12 +1,12 @@
 public abstract class AProblem {
-    private Graph graph;
-    private Vertex start;
-    private Vertex goal;
+    protected Graph graph;
+    protected Vertex start_vertex;
+    protected Vertex goal_vertex;
 
     public AProblem(Graph graph, Vertex start, Vertex goal) {
         this.graph = graph;
-        this.start = start;
-        this.goal = goal;
+        this.start_vertex = start;
+        this.goal_vertex = goal;
     }
 
     public Graph getGraph() {
@@ -17,20 +17,20 @@ public abstract class AProblem {
         this.graph = graph;
     }
 
-    public Vertex getStart() {
-        return start;
+    public Vertex getStart_vertex() {
+        return start_vertex;
     }
 
-    public void setStart(Vertex start) {
-        this.start = start;
+    public void setStart_vertex(Vertex start_vertex) {
+        this.start_vertex = start_vertex;
     }
 
-    public Vertex getGoal() {
-        return goal;
+    public Vertex getGoal_vertex() {
+        return goal_vertex;
     }
 
-    public void setGoal(Vertex goal) {
-        this.goal = goal;
+    public void setGoal_vertex(Vertex goal_vertex) {
+        this.goal_vertex = goal_vertex;
     }
 
     public abstract double getHeuristic(Vertex vertex);

@@ -1,6 +1,6 @@
 import java.util.List;
 
-public class Scenario {
+public class Scenario{
     private Graph graph;
     private List<Agent> agents;
 

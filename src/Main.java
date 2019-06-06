@@ -5,7 +5,7 @@ public class Main {
 
     public static void main(String[] args) {
         //test genarator
-        int[][] ints={{1,0},{0,1},};
+        int[][] ints={{1,0},{0,0}};
         Graph_Generator graph_genarator=new Graph_Generator(ints);
         Graph graph=graph_genarator.generate();
         System.out.println(graph.getEdges().size());

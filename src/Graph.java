@@ -23,8 +23,8 @@ public class Graph {
         return lowest_cost;
     }
 
-    public void addVertex(Location_Indicator location_indicator,Vertex vertex){
-        vertexes.put(location_indicator,vertex);
+    public void addVertex(Vertex vertex){
+        vertexes.put(vertex.getLocation_indicator(),vertex);
         if(vertex.getStay_cost()<lowest_cost)
             lowest_cost = vertex.getStay_cost();
     }
@@ -41,6 +41,7 @@ public class Graph {
     }
 
     public Vertex get_Vertex_By_Indicator(Location_Indicator location_indicator){
-        return vertexes.get(location_indicator);
+        Vertex ans = vertexes.get(location_indicator);
+        return ans;
     }
 }

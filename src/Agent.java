@@ -3,17 +3,13 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Agent {
-    private Graph graph;
-    private Vertex start_vertex;
-    private Vertex goal_vertex;
+public class Agent extends AProblem{
+
     private List<MDD> current_MDDs;
     private Path final_path;
 
-    public Agent(Graph graph, Vertex start_vertex, Vertex goal_vertex) {
-        this.graph = graph;
-        this.start_vertex = start_vertex;
-        this.goal_vertex = goal_vertex;
+    public Agent(Graph graph, Vertex start, Vertex goal) {
+        super(graph, start, goal);
         current_MDDs = new ArrayList<>();
         final_path = null;
     }
@@ -28,6 +24,11 @@ public class Agent {
 
     public Vertex getGoal_vertex() {
         return goal_vertex;
+    }
+
+    @Override
+    public double getHeuristic(Vertex vertex) {
+        return vertex.getLocation_indicator().getHeuristic(goal_vertex.getLocation_indicator());
     }
 
     public List<MDD> getCurrent_MDDs() {

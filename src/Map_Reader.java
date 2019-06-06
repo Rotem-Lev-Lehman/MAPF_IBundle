@@ -18,9 +18,9 @@ public class Map_Reader {
             String width_line=bufferedReader.readLine();
             int width=Integer.parseInt(width_line.split(" ")[1]);
             String nextLine=bufferedReader.readLine();
-            array=new int[width][height];
+            array=new int[height][width];
             int row=0;
-            while ((nextLine=bufferedReader.readLine())!=null && row<height){
+            while ((nextLine=bufferedReader.readLine())!=null && row<array.length){
                 for(int column=0;column<width;column++){
                     char symbol = nextLine.charAt(column);
                     if(symbol == dark_void || symbol == tree){
@@ -35,6 +35,8 @@ public class Map_Reader {
 
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(array.length);
+            System.out.println(array[0].length);
         }
         return array;
     }

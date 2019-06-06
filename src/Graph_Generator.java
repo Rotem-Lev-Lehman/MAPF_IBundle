@@ -15,33 +15,34 @@ public class Graph_Generator {
         for(int row=0;row<array.length;row++){
             for(int column=0;column<array[row].length;column++){
                 if(array[row][column]==free_pass){
-                    Vertex vertex=new Vertex(graph);
-                    Point point = new Point(row,column);
-                    addVertexes(vertex,row,column);
-                    graph.addVertex(point,vertex);
+                    Point point = new Point(column,row);
+                    Vertex vertex=new Vertex(graph,point);
+                    addEdges(vertex,row,column);
+                    graph.addVertex(vertex);
                 }
             }
         }
         return graph;
     }
 
-    private void addVertexes(Vertex vertex, int row, int column) {
+    private void addEdges(Vertex vertex, int row, int column) {
         //check up
-        addVertex(vertex,row-1,column);
+        addEdge(vertex,row-1,column);
         //check left
-        addVertex(vertex,row,column-1);
+        addEdge(vertex,row,column-1);
         //check right
-        addVertex(vertex,row,column+1);
+        addEdge(vertex,row,column+1);
         //check down
-        addVertex(vertex,row+1,column);
+        addEdge(vertex,row+1,column);
     }
 
-    private void addVertex(Vertex from, int row, int column) {
+    private void addEdge(Vertex from, int row, int column) {
         if(inArray(row,column)){
             if(array[row][column]==free_pass){
-                Vertex to = new Vertex(graph);
+                Point point = new Point(column,row);
+                Vertex to = new Vertex(graph,point);
                 Edge edge = new Edge(graph,from,to);
-                graph.addEdge(edge);
+                from.addEdge(edge);
             }
         }
     }

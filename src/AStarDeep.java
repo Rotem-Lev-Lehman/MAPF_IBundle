@@ -14,15 +14,15 @@ public class AStarDeep implements ISearcher {
         open = new PriorityQueue<>();
         finished = new ArrayList<>();
 
-        double h = problem.getHeuristic(problem.getStart());
-        SearchingVertex first = new SearchingVertex(problem.getStart(),0, h);
+        double h = problem.getHeuristic(problem.getStart_vertex());
+        SearchingVertex first = new SearchingVertex(problem.getStart_vertex(),0, h);
 
         addToOpen(first);
 
         while (!open.isEmpty()){
             SearchingVertex curr = open.poll();
 
-            if(curr.getVertex().equals(problem.getGoal())) {
+            if(curr.getVertex().equals(problem.getGoal_vertex())) {
                 finished.add(curr);
                 continue;
             }

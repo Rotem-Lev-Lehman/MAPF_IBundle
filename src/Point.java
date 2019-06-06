@@ -38,4 +38,18 @@ public class Point extends Location_Indicator {
     public int hashCode() {
         return Objects.hash(x, y);
     }
+
+    @Override
+    public double getHeuristic(Location_Indicator goal) {
+        if(goal instanceof Point == false)
+            throw new UnsupportedOperationException();
+        Point goalPoint = (Point)goal;
+        return manhattanDistance(goalPoint);
+    }
+
+    private double manhattanDistance(Point goalPoint) {
+        int xDistance = Math.abs(this.x - goalPoint.x);
+        int yDistance = Math.abs(this.y - goalPoint.y);
+        return xDistance+yDistance;
+    }
 }
