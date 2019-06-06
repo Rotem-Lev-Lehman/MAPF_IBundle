@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class AStarDeep implements ISearcher {
+public class AStarDeep implements ISearcher, IDeepeningSearcher {
 
     private PriorityQueue<SearchingVertex> open;
     private double max_cost;
@@ -8,17 +8,24 @@ public class AStarDeep implements ISearcher {
     private List<SearchingVertex> finished;
 
     @Override
-    public List<Path> searchIteratively(AProblem problem, double minCost, double costJump, double maxCost) {
+    public List<Path> searchDeepening(AProblem problem, double minCost, double maxCost) {
+        /*double costJump = problem.getGraph().getLowest_cost();
         for (double currCost = minCost; currCost <= maxCost; currCost += costJump) {
-            List<Path> paths = search(problem, currCost);
+            List<Path> paths = searchBFS(problem, minCost,currCost,true);
             if(paths != null)
                 return paths;
         }
-        return null; //There is no more
+        return null; //There is no more*/
+        return searchBFS(problem,minCost,max_cost,true);
     }
 
     @Override
-    public List<Path> search(AProblem problem, double max_cost) {
+    public List<Path> search(AProblem problem, double maxCost) {
+        return searchBFS(problem,0,max_cost,false);
+    }
+
+
+    private List<Path> searchBFS(AProblem problem, double min_cost,double max_cost,boolean deepening) {
         this.problem = problem;
         this.max_cost = max_cost;
         open = new PriorityQueue<>();
@@ -34,7 +41,18 @@ public class AStarDeep implements ISearcher {
             //Vertex currVer = curr.getVertex();
 
             if(curr.getVertex().equals(problem.getGoal_vertex())) {
-                finished.add(curr);
+                if(!deepening){
+                    if(curr.getF()<=max_cost){
+                        max_cost=curr.getF();
+                        finished.add(curr);
+                    }
+                    else{
+                        return reconstructPaths();
+                    }
+                }
+                else if(curr.getF()>min_cost){
+                    finished.add(curr);
+                }
                 continue;
             }
             double g;
@@ -75,4 +93,6 @@ public class AStarDeep implements ISearcher {
         if(vertex.getF() <= max_cost)
             open.add(vertex);
     }
+
+
 }
