@@ -1,9 +1,10 @@
 type octile
-height 5
+height 6
 width 5
 map
 @@@@@
 @...@
 @.T.@
 @.T.@
+@...@
 @@@@@
