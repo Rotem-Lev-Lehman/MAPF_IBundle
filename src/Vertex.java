@@ -73,4 +73,12 @@ public class Vertex {
     public String toString() {
         return location_indicator.toString();
     }
+
+    public Edge getEdgeTo(Vertex to) {
+        for(Edge edge : edges){
+            if(edge.getVertex_to().equals(to))
+                return edge;
+        }
+        return null;
+    }
 }

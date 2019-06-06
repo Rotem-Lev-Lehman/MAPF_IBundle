@@ -71,6 +71,10 @@ public class MDD{
         return start_MDD_vertex;
     }
 
+    public void setStart_MDD_vertex(MDD_Vertex start_MDD_vertex) {
+        this.start_MDD_vertex = start_MDD_vertex;
+    }
+
     public double getMDD_cost() {
         return MDD_cost;
     }
