@@ -12,7 +12,7 @@ public class Main {
         System.out.println(graph.getVertexes().size());
         System.out.println("----------------------");
         //test map to array
-        int[][] array= Map_Reader.readMap(new File("resources/maps/test"));
+        int[][] array= Map_Reader.readMap(new File("resources/maps/aTest1.map"));
         for(int i=0;i<array.length;i++){
             for(int j=0;j<array[i].length;j++){
                 System.out.print(array[i][j]);
@@ -21,8 +21,15 @@ public class Main {
         }
         System.out.println("----------------------");
         //test scenario
-        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
+        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest1"));
         int breakpoint=5;
 
+        ISearcher astar = new AStarDeep();
+        List<Path> paths = astar.search(scenarios.get(0).getAgents().get(0),10);
+        for(Path path : paths)
+        {
+            System.out.println("***************************************************");
+            path.printPath();
+        }
     }
 }

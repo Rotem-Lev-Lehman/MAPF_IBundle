@@ -23,4 +23,11 @@ public class Path {
     public void addFromStart(Vertex vertex){
         vertexes.add(0, vertex);
     }
+
+    public void printPath() {
+        System.out.println("The path is:");
+        for(Vertex vertex : vertexes){
+            System.out.println(vertex);
+        }
+    }
 }

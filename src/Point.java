@@ -52,4 +52,9 @@ public class Point extends Location_Indicator {
         int yDistance = Math.abs(this.y - goalPoint.y);
         return xDistance+yDistance;
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
+    }
 }

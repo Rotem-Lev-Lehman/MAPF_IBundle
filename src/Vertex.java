@@ -68,4 +68,9 @@ public class Vertex {
     public int hashCode() {
         return Objects.hash(location_indicator);
     }
+
+    @Override
+    public String toString() {
+        return location_indicator.toString();
+    }
 }

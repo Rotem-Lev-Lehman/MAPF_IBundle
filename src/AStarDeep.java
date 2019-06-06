@@ -21,6 +21,7 @@ public class AStarDeep implements ISearcher {
 
         while (!open.isEmpty()){
             SearchingVertex curr = open.poll();
+            //Vertex currVer = curr.getVertex();
 
             if(curr.getVertex().equals(problem.getGoal_vertex())) {
                 finished.add(curr);
@@ -43,6 +44,7 @@ public class AStarDeep implements ISearcher {
     private void checkNeighbor(SearchingVertex prev, Vertex neighbor, double g) {
         double h = problem.getHeuristic(neighbor);
         SearchingVertex vertex = new SearchingVertex(neighbor, prev, g, h);
+        addToOpen(vertex);
     }
 
     private List<Path> reconstructPaths() {
