@@ -37,4 +37,19 @@ public class Bid {
     public void Accept(Path path){
         agent.setFinal_path(path);
     }
+
+    public int getMaxLength() {
+        int maxLength = 0;
+        for (MDD mdd : MDDs){
+            int length = mdd.getTotal_time();
+            if(length>maxLength)
+                maxLength=length;
+        }
+        return maxLength;
+    }
+
+    public void normalizeTotalTime(int maxLength) {
+        for (MDD mdd : MDDs)
+            MDD_Builder.normalizeTotalTime(mdd,maxLength);
+    }
 }

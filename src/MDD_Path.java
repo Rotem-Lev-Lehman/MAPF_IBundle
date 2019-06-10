@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +52,12 @@ public class MDD_Path {
         if(vertexes.size()>0)
             return vertexes.get(vertexes.size()-1);
         return null;
+    }
+
+    public Path getPath(){
+        Path path = new Path();
+        for (MDD_Vertex vertex : vertexes)
+            path.addVertex(vertex.getOriginal_vertex());
+        return path;
     }
 }
