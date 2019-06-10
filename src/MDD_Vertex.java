@@ -39,4 +39,12 @@ public class MDD_Vertex {
     public int getTime() {
         return time;
     }
+
+    public List<MDD_Vertex> getNeighbores() {
+        List<MDD_Edge> edges = getGoing_out_edges();
+        List<MDD_Vertex> ans = new ArrayList<>();
+        for (MDD_Edge edge : edges)
+            ans.add(edge.getTo_MDD_vertex());
+        return ans;
+    }
 }

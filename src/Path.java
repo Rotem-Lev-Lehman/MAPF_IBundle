@@ -2,7 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Path {
-    List<Vertex> vertexes;
+
+    private List<Vertex> vertexes;
 
     public Path() {
         this.vertexes = new ArrayList<>();
