@@ -63,15 +63,15 @@ public class Auctioneer {
         return false;
     }
 
-    private boolean create_Combination(List<Bid> bids, List<MDD> combination, int i) {
-        if(bids.size()==i)
+    private boolean create_Combination(List<Bid> bids, List<MDD> combination, int bidNum) {
+        if(bids.size()==bidNum)
             return check_Combination(bids,combination);
 
         List<MDD> continue_Combination;
-        for(MDD mdd:bids.get(i).getMDDs()){
+        for(MDD mdd : bids.get(bidNum).getMDDs()){
             continue_Combination = new ArrayList<>(combination);
             continue_Combination.add(mdd);
-            if(create_Combination(bids,continue_Combination,i+1)){
+            if(create_Combination(bids,continue_Combination,bidNum+1)){
                 return true;
             }
         }
@@ -95,7 +95,6 @@ public class Auctioneer {
 
     private boolean create_Path_Combinations(List<Bid> bids, List<MDD_Path> paths, int time,int bidNum) {
         if(time == makespan){
-            // TODO: 10-Jun-19
             for (int i=0;i<bids.size();i++){
                 bids.get(i).Accept(paths.get(i).getPath());
             }
@@ -105,11 +104,15 @@ public class Auctioneer {
             return create_Path_Combinations(bids,paths,time++,0);
         }
         for(MDD_Vertex neighbor : paths.get(bidNum).getLast().getNeighbores()){
+            boolean conflict = false;
             for (int i=0;i<bidNum-1;i++){
                 if (paths.get(i).getLast().equals(neighbor)){
-                    return false;
+                    conflict = true;
+                    break;
                 }
             }
+            if (conflict)
+                continue;
             List<MDD_Path> continue_Path = new ArrayList<>(paths);
             MDD_Path path = continue_Path.get(bidNum);
             path.addVertex(neighbor);
