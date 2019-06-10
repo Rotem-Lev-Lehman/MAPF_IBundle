@@ -106,13 +106,13 @@ public class Auctioneer {
         }
         for(MDD_Vertex neighbor : paths.get(bidNum).getLast().getNeighbores()){
             boolean conflict = false;
-            for (int i=0;i<bidNum-1;i++){
+            for (int i=0;i<bidNum;i++){
                 if (paths.get(i).getLast().equals(neighbor)){
                     conflict = true;
                     break;
                 }
                 if(time>0){
-                    if(paths.get(i).get(paths.get(i).size()-2).getOriginal_vertex().equals(neighbor.getOriginal_vertex()) && paths.get(i).getLast().getOriginal_vertex().equals(paths.get(bidNum).get(paths.get(bidNum).size()-2).getOriginal_vertex())){
+                    if(paths.get(i).get(paths.get(i).size()-2).getOriginal_vertex().equals(neighbor.getOriginal_vertex()) && paths.get(i).getLast().getOriginal_vertex().equals(paths.get(bidNum).getLast().getOriginal_vertex())){
                         conflict = true;
                         break;
                     }
