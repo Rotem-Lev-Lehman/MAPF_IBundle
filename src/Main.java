@@ -34,12 +34,25 @@ public class Main {
         }
         */
         //*******************************************************************************************************************************
+
         MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(0));
+        /*
         MDD_Agent agent = mdd_scenario.getAgents().get(0);
         agent.calculateFirstMDD();
         System.out.println(agent.getMaxMDDTotalCost());
         Bid bid = agent.MakeABid();
         bid.Decline();
         System.out.println(agent.getMaxMDDTotalCost());
+        bid.normalizeTotalTime(9);
+        System.out.println(agent.getMaxMDDTotalCost());
+        */
+        //*******************************************************************************************************************************
+
+        Auctioneer auctioneer = new Auctioneer();
+        auctioneer.solve(mdd_scenario.getAgents());
+        for(MDD_Agent agent1 : mdd_scenario.getAgents()){
+            System.out.println("***************************************************************************");
+            agent1.getFinal_path().printPath();
+        }
     }
 }

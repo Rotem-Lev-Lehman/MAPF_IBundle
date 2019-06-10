@@ -101,7 +101,7 @@ public class Auctioneer {
             return true;
         }
         if(bidNum == bids.size()){
-            return create_Path_Combinations(bids,paths,time++,0);
+            return create_Path_Combinations(bids,paths,time + 1,0);
         }
         for(MDD_Vertex neighbor : paths.get(bidNum).getLast().getNeighbores()){
             boolean conflict = false;
@@ -116,7 +116,7 @@ public class Auctioneer {
             List<MDD_Path> continue_Path = new ArrayList<>(paths);
             MDD_Path path = continue_Path.get(bidNum);
             path.addVertex(neighbor);
-            if(create_Path_Combinations(bids,continue_Path,time,bidNum++)){
+            if(create_Path_Combinations(bids,continue_Path,time,bidNum + 1)){
                 return true;
             }
         }

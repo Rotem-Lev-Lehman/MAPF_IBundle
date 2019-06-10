@@ -65,7 +65,7 @@ public class MDD_Builder {
         if (prev_vertexes.size() != 1) {
             throw new UnsupportedOperationException("There can be only 1 goal state");
         }
-        mdd.setGoal_MDD_vertex(prev_vertexes.get(0));
+        mdd.setGoal_MDD_vertex((MDD_Vertex)prev_vertexes.values().toArray()[0]);
         mdd.setTotal_time(totalTime);
         return mdd;
     }
@@ -83,6 +83,8 @@ public class MDD_Builder {
             prev.addMDD_Edge(edge);
             mdd.addMDD_Vertex(curr);
             mdd.addMDD_Edge(edge);
+
+            prev = curr;
         }
         mdd.setTotal_time(new_total_time);
     }
