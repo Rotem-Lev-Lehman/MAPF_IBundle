@@ -96,7 +96,8 @@ public class Auctioneer {
     private boolean create_Path_Combinations(List<Bid> bids, List<MDD_Path> paths, int time,int bidNum) {
         if(time == makespan){
             for (int i=0;i<bids.size();i++){
-                bids.get(i).Accept(paths.get(i).getPath());
+                Bid curr = bids.get(i);
+                curr.Accept(paths.get(i).getPath(curr.getAgent().getGoal_vertex()));
             }
             return true;
         }

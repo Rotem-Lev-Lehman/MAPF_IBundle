@@ -54,10 +54,20 @@ public class MDD_Path {
         return null;
     }
 
-    public Path getPath(){
+    public Path getPath(Vertex goal){
         Path path = new Path();
-        for (MDD_Vertex vertex : vertexes)
-            path.addVertex(vertex.getOriginal_vertex());
+        boolean added_goal = false;
+        for (MDD_Vertex vertex : vertexes) {
+            if(!vertex.getOriginal_vertex().equals(goal)) {
+                path.addVertex(vertex.getOriginal_vertex());
+            }
+            else{
+                if(!added_goal) {
+                    path.addVertex(vertex.getOriginal_vertex());
+                    added_goal = true;
+                }
+            }
+        }
         return path;
     }
 }
