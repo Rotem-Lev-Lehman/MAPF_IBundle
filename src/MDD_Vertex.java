@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MDD_Vertex {
     private Vertex original_vertex;
@@ -46,5 +47,19 @@ public class MDD_Vertex {
         for (MDD_Edge edge : edges)
             ans.add(edge.getTo_MDD_vertex());
         return ans;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MDD_Vertex vertex = (MDD_Vertex) o;
+        return time == vertex.time &&
+                Objects.equals(original_vertex, vertex.original_vertex);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(original_vertex, time);
     }
 }

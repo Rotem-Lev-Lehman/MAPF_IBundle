@@ -110,6 +110,12 @@ public class Auctioneer {
                     conflict = true;
                     break;
                 }
+                if(time>0){
+                    if(paths.get(i).get(paths.get(i).size()-2).getOriginal_vertex().equals(neighbor.getOriginal_vertex()) && paths.get(i).getLast().getOriginal_vertex().equals(paths.get(bidNum).get(paths.get(bidNum).size()-2).getOriginal_vertex())){
+                        conflict = true;
+                        break;
+                    }
+                }
             }
             if (conflict)
                 continue;
