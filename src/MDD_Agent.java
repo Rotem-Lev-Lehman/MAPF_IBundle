@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MDD_Agent extends Agent {
+    AStarDeep searcher;
     private List<MDD> current_MDDs;
     public MDD_Agent(Graph graph, Vertex start, Vertex goal) {
         super(graph, start, goal);
         current_MDDs = new ArrayList<>();
+        searcher = new AStarDeep();
     }
 
     public List<MDD> getCurrent_MDDs() {
@@ -38,8 +40,20 @@ public class MDD_Agent extends Agent {
         return new Bid(this, current_MDDs);
     }
 
+    public void calculateFirstMDD(){
+        List<Path> paths = searcher.search(this, graph.getMaxCostForPath());
+        MDD mdd = MDD_Builder.Build(graph, start_vertex, paths);
+        current_MDDs.add(mdd);
+    }
+
+    public boolean passedMaxCostForGraph(){
+        return getMaxMDDTotalCost() >= graph.getMaxCostForPath();
+    }
+
     public void calculateMoreMDDs() {
-        //todo calculate with Searching algorithm until the depth of getMaxMDDTotalCost()
-        throw new NotImplementedException();
+        double max = getMaxMDDTotalCost();
+        List<Path> paths = searcher.searchDeepening(this, max, max);
+        MDD mdd = MDD_Builder.Build(graph, start_vertex, paths);
+        current_MDDs.add(mdd);
     }
 }
