@@ -64,7 +64,7 @@ public class MDD_Builder {
 
     public static void normalizeTotalTime(MDD mdd, int new_total_time) {
         int current_mdd_time = mdd.getTotal_time();
-        if (current_mdd_time >= new_total_time)
+        if (current_mdd_time > new_total_time)
             throw new UnsupportedOperationException("The new time must be more then the existing total time");
 
         MDD_Vertex prev = mdd.getGoal_MDD_vertex();
