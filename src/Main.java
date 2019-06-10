@@ -49,10 +49,15 @@ public class Main {
         //*******************************************************************************************************************************
 
         Auctioneer auctioneer = new Auctioneer();
-        auctioneer.solve(mdd_scenario.getAgents());
-        for(MDD_Agent agent1 : mdd_scenario.getAgents()){
-            System.out.println("***************************************************************************");
-            agent1.getFinal_path().printPath();
+        if(auctioneer.solve(mdd_scenario.getAgents())){
+            for(MDD_Agent agent1 : mdd_scenario.getAgents()){
+                System.out.println("***************************************************************************");
+                agent1.getFinal_path().printPath();
+            }
         }
+        else {
+            System.out.println("Solver failed");
+        }
+
     }
 }
