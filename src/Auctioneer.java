@@ -6,12 +6,24 @@ public class Auctioneer {
     private List<MDD_Agent> agents;
     private int makespan;
 
-    public boolean solveMDD(List<MDD_Agent> agentsToSolve){
-        while (solveMDD2(agentsToSolve)==false);
+    public boolean solve(List<MDD_Agent> agentsToSolve){
+        for (MDD_Agent agent : agentsToSolve)
+            agent.calculateFirstMDD();
+        while (solveMDD(agentsToSolve)==false){
+            boolean hasChance = false;
+            for (MDD_Agent agent : agentsToSolve){
+                if(agent.passedMaxCostForGraph()==false){
+                    hasChance = true;
+                    break;
+                }
+            }
+            if(hasChance == false)
+                return hasChance;
+        }
         return true;
     }
 
-    public boolean solveMDD2(List<MDD_Agent> agentsToSolve){
+    private boolean solveMDD(List<MDD_Agent> agentsToSolve){
         this.agents = agentsToSolve;
         List<Bid> bids = new ArrayList<>();
         for (MDD_Agent agent:agents) {
@@ -40,7 +52,6 @@ public class Auctioneer {
         }
         return maxLength;
     }
-    
 
     private boolean checkForSolution(List<Bid> bids) {
         if(bids.isEmpty()==false){
