@@ -48,6 +48,14 @@ public class MDD_Builder {
                         mdd.addMDD_Edge(mdd_edge);
                         curr_vertexes.put(curr_vertex, curr_mdd_vertex);
                     }
+                    else{
+                        MDD_Vertex curr_mdd_vertex = curr_vertexes.get(curr_vertex);
+                        if(!prev.getNeighbores().contains(curr_mdd_vertex)){
+                            MDD_Edge mdd_edge = new MDD_Edge(prev, curr_mdd_vertex, mdd);
+                            prev.addMDD_Edge(mdd_edge);
+                            mdd.addMDD_Edge(mdd_edge);
+                        }
+                    }
                 } else
                     throw new UnsupportedOperationException();
             }

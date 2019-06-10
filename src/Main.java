@@ -24,6 +24,7 @@ public class Main {
         List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest1"));
         int breakpoint=5;
 
+        /*
         AStarDeep astar = new AStarDeep();
         List<Path> paths = astar.searchDeepening(scenarios.get(0).getAgents().get(0),4,6);
         for(Path path : paths)
@@ -31,5 +32,14 @@ public class Main {
             System.out.println("***************************************************");
             path.printPath();
         }
+        */
+        //*******************************************************************************************************************************
+        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(0));
+        MDD_Agent agent = mdd_scenario.getAgents().get(0);
+        agent.calculateFirstMDD();
+        System.out.println(agent.getMaxMDDTotalCost());
+        Bid bid = agent.MakeABid();
+        bid.Decline();
+        System.out.println(agent.getMaxMDDTotalCost());
     }
 }
