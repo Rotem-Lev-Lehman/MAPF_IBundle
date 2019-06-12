@@ -1,6 +1,7 @@
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 
 public class MDD_Path {
@@ -69,5 +70,29 @@ public class MDD_Path {
             }
         }
         return path;
+    }
+
+    public Path getPath(){
+        Path path = new Path();
+        for (MDD_Vertex vertex : vertexes) {
+            path.addVertex(vertex.getOriginal_vertex());
+        }
+        return path;
+    }
+
+    private double getMDDCost(){
+        if(vertexes.isEmpty())
+            throw new InputMismatchException("There must be vertexes to get the MDD cost");
+        return vertexes.get(0).getMdd().getMDD_cost();
+    }
+
+    private double getMDDBiddingCost(){
+        if(vertexes.isEmpty())
+            throw new InputMismatchException("There must be vertexes to get the MDD bidding cost");
+        return vertexes.get(0).getMdd().getBidding_cost();
+    }
+
+    public double getMDDGrade(){
+        return getMDDBiddingCost() - getMDDCost();
     }
 }
