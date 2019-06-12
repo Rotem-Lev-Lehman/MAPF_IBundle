@@ -2,6 +2,8 @@ import java.util.*;
 
 public class MDD_Builder {
 
+    private static int num = 0;
+
     public static MDD Build(Graph graph, Vertex start, List<Path> paths) {
         if (paths.size() == 0)
             return null;
@@ -71,11 +73,13 @@ public class MDD_Builder {
     }
 
     public static void normalizeTotalTime(MDD mdd, int new_total_time) {
+        num++;
         int current_mdd_time = mdd.getTotal_time();
         if (current_mdd_time > new_total_time)
             throw new UnsupportedOperationException("The new time must be more then the existing total time");
 
         MDD_Vertex prev = mdd.getGoal_MDD_vertex();
+        MDD_Vertex testMe = prev;
         Vertex goal = prev.getOriginal_vertex();
         for (int i = current_mdd_time; i < new_total_time; i++) {
             MDD_Vertex curr = new MDD_Vertex(goal, mdd, prev.getTime() + 1, prev.getCost_until_me());
@@ -86,6 +90,7 @@ public class MDD_Builder {
 
             prev = curr;
         }
+        mdd.setGoal_MDD_vertex(prev);
         mdd.setTotal_time(new_total_time);
     }
 
