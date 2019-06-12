@@ -95,7 +95,6 @@ public class Auctioneer {
     }
 
     private int fixBidsLength(List<Bid> bids) {
-        // TODO: 12-Jun-19 need to test
         int maxLength = 0;
         for (Bid bid : bids) {
             int length = bid.getMaxLength();
@@ -184,8 +183,11 @@ public class Auctioneer {
             }
             if (conflict)
                 continue;
-            // TODO: 12-Jun-19 check if really do deep copy
-            List<MDD_Path> continue_Path = new ArrayList<>(paths);
+
+            List<MDD_Path> continue_Path = new ArrayList<>();
+            for(MDD_Path path : paths)
+                continue_Path.add(new MDD_Path(path));
+
             MDD_Path path = continue_Path.get(bidNum);
             path.addVertex(neighbor);
             if (recursive_Path_Combinations(agentsToSolve, bids, continue_Path, time, bidNum + 1)) {

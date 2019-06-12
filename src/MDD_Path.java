@@ -14,6 +14,11 @@ public class MDD_Path {
         this.vertexes = new ArrayList<>();
     }
 
+    public MDD_Path(MDD_Path other) {
+        this.bid = other.bid;
+        this.vertexes = new ArrayList<>(other.vertexes);
+    }
+
     public List<MDD_Vertex> getVertexes() {
         return vertexes;
     }
