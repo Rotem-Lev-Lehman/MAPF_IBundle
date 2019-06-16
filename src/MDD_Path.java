@@ -98,6 +98,6 @@ public class MDD_Path {
     }
 
     public double getMDDGrade(){
-        return getMDDBiddingCost() - getMDDCost();
+        return getMDDCost() - getMDDBiddingCost();
     }
 }

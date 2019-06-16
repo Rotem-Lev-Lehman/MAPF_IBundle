@@ -21,7 +21,9 @@ public class Main {
         }
         System.out.println("----------------------");
         //test scenario
-        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest1"));
+        //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest1"));
+        //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest3Agents1"));
+        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest3Agents2"));
         int breakpoint=5;
 
         /*

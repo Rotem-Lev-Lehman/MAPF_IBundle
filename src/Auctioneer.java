@@ -150,6 +150,7 @@ public class Auctioneer {
             double grade = 0;
             for(int i = 0; i < paths.size(); i++){
                 grade += paths.get(i).getMDDGrade();
+                //grade += paths.get(i).getMDDCost() - paths.get(i).getMDDBiddingCost();
             }
             if (grade > highestProfit) {
                 highestProfit = grade;
@@ -157,10 +158,10 @@ public class Auctioneer {
                 solutions = new ArrayList<>();
                 bestBids = bids;
                 for (int i = 0; i < bids.size(); i++) {
-                    /*Bid curr = bids.get(i);
+                    Bid curr = bids.get(i);
                     Vertex goal = curr.getAgent().getGoal_vertex();
-                    solutions.add(paths.get(i).getPath(goal));*/
-                    solutions.add(paths.get(i).getPath());
+                    solutions.add(paths.get(i).getPath(goal));
+                    //solutions.add(paths.get(i).getPath());
                 }
             }
             return true;
