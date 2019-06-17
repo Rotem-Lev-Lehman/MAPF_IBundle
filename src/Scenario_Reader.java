@@ -7,7 +7,7 @@ import java.util.List;
 public class Scenario_Reader {
 
     public static List<Scenario> readScenarios(File file){
-        return readBoundScenarios(file,Integer.MAX_VALUE,Integer.MAX_VALUE);
+        return readBoundScenarios(file,Integer.MAX_VALUE,Integer.MAX_VALUE) ;
     }
 
     public static List<Scenario> readScenariosBounded(File file,int bound){
