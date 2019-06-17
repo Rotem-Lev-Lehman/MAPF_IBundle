@@ -71,7 +71,7 @@ public class Scenario_Reader {
             FileReader fileReader=new FileReader(file);
             BufferedReader bufferedReader=new BufferedReader(fileReader);
             String nextLine;
-            bufferedReader.readLine();
+            bufferedReader.readLine() ;
             Graph graph = null;
             List<Agent> agents = null;
             boolean rightIndex = false;
