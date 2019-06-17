@@ -23,7 +23,9 @@ public class Main {
         //test scenario
         //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest1"));
         //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest3Agents1"));
-        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest3Agents2"));
+        //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest3Agents2"));
+        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
+
         int breakpoint=5;
 
         /*
@@ -37,7 +39,7 @@ public class Main {
         */
         //*******************************************************************************************************************************
 
-        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(0));
+        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(57));
         /*
         MDD_Agent agent = mdd_scenario.getAgents().get(0);
         agent.calculateFirstMDD();
