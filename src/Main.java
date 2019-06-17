@@ -145,7 +145,7 @@ public class Main {
                     Scenario scenario = scenarios.get(0);
                     //for (Scenario scenario : scenarios) {
                     if (Thread.interrupted())
-                        throw new InterruptedException();
+                        throw new InterruptedException("only read file");
                     MDD_Scenario mdd_scenario = new MDD_Scenario(scenario);
 
                     Auctioneer auctioneer = new Auctioneer();
@@ -160,6 +160,7 @@ public class Main {
             }
             catch (Exception e){
                 System.out.println("Interrupted");
+                System.out.println(e.getMessage());
                 amount_failed.addOne();
             }
             semaphore.release();
