@@ -100,4 +100,10 @@ public class MDD_Path {
     public double getMDDGrade(){
         return getMDDCost() - getMDDBiddingCost();
     }
+
+    public MDD getMDD(){
+        if(vertexes.isEmpty())
+            throw new InputMismatchException("There must be vertexes to get the MDD");
+        return vertexes.get(0).getMdd();
+    }
 }

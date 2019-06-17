@@ -33,7 +33,6 @@ public class Auctioneer {
                         for (int k = 0; k < bestBids.size(); k++) {
                             bestBids.get(k).Accept(solutions.get(k));
                         }
-                        System.out.println(highestProfit);
                         return true;
                     } else {
                         for (int j = 0; j < agentsToSolve.size(); j++) {
