@@ -28,15 +28,6 @@ public class Main {
             System.out.println();
         }
         System.out.println("----------------------");
-        */
-        //test scenario
-        //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest1"));
-        //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest3Agents1"));
-        //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest3Agents2"));
-        //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
-       // List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cavern1_haunted.map.scen"));
-
-        //int breakpoint=5;
 
         /*
         AStarDeep astar = new AStarDeep();
