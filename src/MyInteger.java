@@ -16,4 +16,9 @@ public class MyInteger {
     public void addOne(){
         num++;
     }
+
+    @Override
+    public String toString() {
+        return num + "";
+    }
 }

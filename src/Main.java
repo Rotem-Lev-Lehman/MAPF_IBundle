@@ -77,17 +77,23 @@ public class Main {
         List<Integer> amount_of_agents_list = new ArrayList<>();
         List<Integer> amount_solved_list = new ArrayList<>();
         List<Integer> amount_failed_list = new ArrayList<>();
+        List<MyInteger> agents = new ArrayList<>();
+        List<MyInteger> solved = new ArrayList<>();
+        List<MyInteger> failed = new ArrayList<>();
 
         Semaphore semaphore = new Semaphore(0);
+        int index = 0;
 
         for(int amount_of_agents = 2; amount_of_agents <= 10; amount_of_agents++) {
 
             int amount_solved = 0;
             int amount_failed = 0;
-            MyInteger agents = new MyInteger(amount_of_agents);
-            MyInteger solved = new MyInteger(amount_solved);
-            MyInteger failed = new MyInteger(amount_failed);
-            myThread thread = new myThread(agents,solved,failed,listOfFiles, Thread.currentThread(),semaphore);
+            agents.add(new MyInteger(amount_of_agents));
+            solved.add(new MyInteger(amount_solved));
+            failed.add(new MyInteger(amount_failed));
+            myThread thread = new myThread(agents.get(index),solved.get(index),failed.get(index),listOfFiles, Thread.currentThread(),semaphore);
+            index++;
+
             Thread thread1 = new Thread(thread);
             thread1.start();
             try {
@@ -102,15 +108,18 @@ public class Main {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
+            /*
             amount_of_agents_list.add(agents.getNum());
             amount_solved_list.add(solved.getNum());
             amount_failed_list.add(failed.getNum());
+            */
         }
-        writeAmountSolvedAndFailed(amount_of_agents_list, amount_solved_list, amount_failed_list);
+        writeAmountSolvedAndFailed(agents, solved, failed);
     }
 
-    class myThread implements Runnable {
+
+
+    private class myThread implements Runnable {
         private MyInteger amount_of_agents;
         private MyInteger amount_solved;
         private MyInteger amount_failed;
@@ -132,8 +141,9 @@ public class Main {
             try {
                 for (int i = 0; i < listOfFiles.length; i++) {
                     File curr = listOfFiles[i];
-                    List<Scenario> scenarios = Scenario_Reader.readBoundScenarios(curr, amount_of_agents.getNum());
+                    List<Scenario> scenarios = Scenario_Reader.readBoundScenarios(curr, amount_of_agents.getNum(),1);
                     Scenario scenario = scenarios.get(0);
+                    //System.out.println(scenario.getAgents().size());
                     //for (Scenario scenario : scenarios) {
                     if (Thread.interrupted())
                         throw new InterruptedException("only read file");
@@ -152,13 +162,14 @@ public class Main {
             catch (Exception e){
                 System.out.println("Interrupted");
                 System.out.println(e.getMessage());
+                System.out.println(amount_solved.getNum());
                 amount_failed.addOne();
             }
             semaphore.release();
         }
     }
 
-    private void writeAmountSolvedAndFailed(List<Integer> amount_of_agents, List<Integer> amount_solved, List<Integer> amount_failed) {
+    private void writeAmountSolvedAndFailed(List<MyInteger> amount_of_agents, List<MyInteger> amount_solved, List<MyInteger> amount_failed) {
         try (PrintWriter writer = new PrintWriter(new File("experiment_results2.csv"))) {
 
             StringBuilder sb = new StringBuilder();

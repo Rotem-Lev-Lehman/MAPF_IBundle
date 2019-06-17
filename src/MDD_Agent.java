@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MDD_Agent extends Agent {
     
-    AStarDeep searcher;
+    private AStarDeep searcher;
     private List<MDD> current_MDDs;
 
     public MDD_Agent(Graph graph, Vertex start, Vertex goal) {
