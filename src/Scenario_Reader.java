@@ -67,6 +67,10 @@ public class Scenario_Reader {
     }
 
     public static Scenario readScenario(File file,int wantedScenarioIndex){
+        return readScenarioAgentBound(file,wantedScenarioIndex,Integer.MAX_VALUE);
+    }
+
+    public static Scenario readScenarioAgentBound(File file,int wantedScenarioIndex,int agentsBound){
         try {
             FileReader fileReader=new FileReader(file);
             BufferedReader bufferedReader=new BufferedReader(fileReader);
@@ -75,16 +79,17 @@ public class Scenario_Reader {
             Graph graph = null;
             List<Agent> agents = null;
             boolean rightIndex = false;
+            int counter =0;
             while ((nextLine=bufferedReader.readLine())!=null){
                 String[] data = nextLine.split("\t");
                 int scenario_index = Integer.parseInt(data[0]);
                 if(scenario_index<wantedScenarioIndex){
                     continue;
                 }
-                else if(scenario_index>wantedScenarioIndex){
+                else if(scenario_index>wantedScenarioIndex || counter>=agentsBound){
                     break;
                 }
-                else{
+                else {
                     if(rightIndex==false){
                         graph = getGraph(data[1]);
                         agents = new ArrayList<>();
@@ -93,6 +98,7 @@ public class Scenario_Reader {
                     Point start = new Point(Integer.parseInt(data[4]),Integer.parseInt(data[5]));
                     Point goal = new Point(Integer.parseInt(data[6]),Integer.parseInt(data[7]));
                     agents.add(new Agent(graph,graph.get_Vertex_By_Indicator(start),graph.get_Vertex_By_Indicator(goal)));
+                    counter++;
                 }
             }
             if(graph != null && agents != null){
