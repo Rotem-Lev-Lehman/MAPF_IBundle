@@ -8,7 +8,7 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
     private List<SearchingVertex> finished;
 
     @Override
-    public List<Path> searchDeepening(AProblem problem, double minCost, double maxCost) {
+    public List<Path> searchDeepening(AProblem problem, double minCost, double maxCost) throws InterruptedException {
         /*double costJump = problem.getGraph().getLowest_cost();
         for (double currCost = minCost; currCost <= maxCost; currCost += costJump) {
             List<Path> paths = searchBFS(problem, minCost,currCost,true);
@@ -20,12 +20,12 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
     }
 
     @Override
-    public List<Path> search(AProblem problem, double maxCost) {
+    public List<Path> search(AProblem problem, double maxCost) throws InterruptedException {
         return searchBFS(problem,0,maxCost,false);
     }
 
 
-    private List<Path> searchBFS(AProblem problem, double min_cost, double max_cost, boolean deepening) {
+    private List<Path> searchBFS(AProblem problem, double min_cost, double max_cost, boolean deepening) throws InterruptedException {
         this.problem = problem;
         this.max_cost = max_cost;
         open = new PriorityQueue<>();
@@ -37,6 +37,9 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
         addToOpen(first);
 
         while (!open.isEmpty()){
+            if(Thread.interrupted())
+                throw new InterruptedException("Auctioneer was interrupted");
+
             SearchingVertex curr = open.poll();
             //Vertex currVer = curr.getVertex();
 

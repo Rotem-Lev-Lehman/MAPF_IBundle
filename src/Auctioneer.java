@@ -9,7 +9,7 @@ public class Auctioneer {
     private List<Bid> bestBids;
     private List<Path> solutions;
 
-    public boolean solve(List<MDD_Agent> agentsToSolve) {
+    public boolean solve(List<MDD_Agent> agentsToSolve) throws InterruptedException {
         for (MDD_Agent agent : agentsToSolve) {
             agent.calculateFirstMDD();
         }
@@ -17,13 +17,22 @@ public class Auctioneer {
             solutions = null;
             List<Bid> allBids = new ArrayList<>();
             for (MDD_Agent agent : agentsToSolve) {
+                if(Thread.interrupted())
+                    throw new InterruptedException("Auctioneer was interrupted");
                 allBids.add(agent.MakeABid());
             }
             for (int i = agentsToSolve.size(); i > 0; i--) {
+
+                if(Thread.interrupted())
+                    throw new InterruptedException("Auctioneer was interrupted");
+
                 initializeSol();
                 boolean solved = false;
                 List<List<MDD_Agent>> agentsCombinations = getAgentsCombinations(agentsToSolve, i);
                 for (List<MDD_Agent> agentsList : agentsCombinations) {
+                    if(Thread.interrupted())
+                        throw new InterruptedException("Auctioneer was interrupted");
+
                     if (solveMDD(agentsList)) {
                         solved = true;
                     }
@@ -63,14 +72,17 @@ public class Auctioneer {
         solutions = new ArrayList<>();
     }
 
-    private List<List<MDD_Agent>> getAgentsCombinations(List<MDD_Agent> agentsToSolve, int size) {
+    private List<List<MDD_Agent>> getAgentsCombinations(List<MDD_Agent> agentsToSolve, int size) throws InterruptedException {
         List<List<MDD_Agent>> list = new ArrayList<>();
         List<MDD_Agent> currentList = new ArrayList<>();
         createAgentsCombination(agentsToSolve, list, currentList, size, 0);
         return list;
     }
 
-    private void createAgentsCombination(List<MDD_Agent> agentsToSolve, List<List<MDD_Agent>> list, List<MDD_Agent> currentList, int size, int i) {
+    private void createAgentsCombination(List<MDD_Agent> agentsToSolve, List<List<MDD_Agent>> list, List<MDD_Agent> currentList, int size, int i) throws InterruptedException {
+        if(Thread.interrupted())
+            throw new InterruptedException("Auctioneer was interrupted");
+
         if (currentList.size() == size) {
             list.add(currentList);
             return;
@@ -85,9 +97,12 @@ public class Auctioneer {
         createAgentsCombination(agentsToSolve, list, yesCurrentList, size, i + 1);
     }
 
-    private boolean solveMDD(List<MDD_Agent> agentsToSolve) {
+    private boolean solveMDD(List<MDD_Agent> agentsToSolve) throws InterruptedException {
         List<Bid> bids = new ArrayList<>();
         for (MDD_Agent agent : agentsToSolve) {
+            if(Thread.interrupted())
+                throw new InterruptedException("Auctioneer was interrupted");
+
             bids.add(agent.MakeABid());
         }
         makespan = fixBidsLength(bids);
@@ -107,7 +122,7 @@ public class Auctioneer {
         return maxLength;
     }
 
-    private boolean checkForSolution(List<MDD_Agent> agentsToSolve, List<Bid> bids) {
+    private boolean checkForSolution(List<MDD_Agent> agentsToSolve, List<Bid> bids) throws InterruptedException {
         if (bids.isEmpty() == false) {
             List<MDD> combination = new ArrayList<>();
             return recursive_MDD_Combinations(agentsToSolve, bids, combination, 0);
@@ -115,7 +130,10 @@ public class Auctioneer {
         return false;
     }
 
-    private boolean recursive_MDD_Combinations(List<MDD_Agent> agentsToSolve, List<Bid> bids, List<MDD> combination, int bidNum) {
+    private boolean recursive_MDD_Combinations(List<MDD_Agent> agentsToSolve, List<Bid> bids, List<MDD> combination, int bidNum) throws InterruptedException {
+        if(Thread.interrupted())
+            throw new InterruptedException("Auctioneer was interrupted");
+
         if (bids.size() == bidNum)
             return check_Combination(agentsToSolve, bids, combination);
 
@@ -130,10 +148,13 @@ public class Auctioneer {
         return false;
     }
 
-    private boolean check_Combination(List<MDD_Agent> agentsToSolve, List<Bid> bids, List<MDD> mddCombination) {
+    private boolean check_Combination(List<MDD_Agent> agentsToSolve, List<Bid> bids, List<MDD> mddCombination) throws InterruptedException {
         if (bids.size() == mddCombination.size() && bids.isEmpty() == false) {
             List<MDD_Path> paths = new ArrayList<>();
             for (int i = 0; i < bids.size(); i++) {
+                if(Thread.interrupted())
+                    throw new InterruptedException("Auctioneer was interrupted");
+
                 MDD_Path path = new MDD_Path(bids.get(i));
                 path.addVertex(mddCombination.get(i).getStart_MDD_vertex());
                 paths.add(path);
@@ -144,7 +165,10 @@ public class Auctioneer {
         return false;
     }
 
-    private boolean recursive_Path_Combinations(List<MDD_Agent> agentsToSolve, List<Bid> bids, List<MDD_Path> paths, int time, int bidNum) {
+    private boolean recursive_Path_Combinations(List<MDD_Agent> agentsToSolve, List<Bid> bids, List<MDD_Path> paths, int time, int bidNum) throws InterruptedException {
+        if(Thread.interrupted())
+            throw new InterruptedException("Auctioneer was interrupted");
+
         if (time == makespan) {
             double grade = 0;
             for(int i = 0; i < paths.size(); i++){

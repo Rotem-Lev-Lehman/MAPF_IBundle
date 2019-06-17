@@ -29,7 +29,7 @@ public class Bid {
         return MDDs;
     }
 
-    public void Decline(){
+    public void Decline() throws InterruptedException {
         agent.addMinToCurrentMDDs();
         agent.calculateMoreMDDs();
     }
