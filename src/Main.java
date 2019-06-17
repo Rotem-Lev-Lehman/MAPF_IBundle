@@ -139,6 +139,7 @@ public class Main {
         @Override
         public void run() {
             try {
+
                 for (int i = 0; i < listOfFiles.length; i++) {
                     File curr = listOfFiles[i];
                     List<Scenario> scenarios = Scenario_Reader.readBoundScenarios(curr, amount_of_agents.getNum(),1);
