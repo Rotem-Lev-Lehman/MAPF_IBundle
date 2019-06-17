@@ -140,25 +140,28 @@ public class Main {
         public void run() {
             try {
 
-                for (int i = 0; i < listOfFiles.length; i++) {
-                    File curr = listOfFiles[i];
-                    List<Scenario> scenarios = Scenario_Reader.readBoundScenarios(curr, amount_of_agents.getNum(),1);
-                    Scenario scenario = scenarios.get(0);
-                    //System.out.println(scenario.getAgents().size());
-                    //for (Scenario scenario : scenarios) {
-                    if (Thread.interrupted())
-                        throw new InterruptedException("only read file");
-                    MDD_Scenario mdd_scenario = new MDD_Scenario(scenario);
+                for (int scenIndex = 0; scenIndex < 40; scenIndex++) {
+                    for (int i = 0; i < listOfFiles.length; i++) {
+                        File curr = listOfFiles[i];
+                        List<Scenario> scenarios = Scenario_Reader.readBoundScenarios(curr, amount_of_agents.getNum(),1);
+                        //Scenario scenario = Scenario_Reader.readScenario(curr, scenIndex);
+                        Scenario scenario = scenarios.get(0);
+                        //System.out.println(scenario.getAgents().size());
+                        //for (Scenario scenario : scenarios) {
+                        if (Thread.interrupted())
+                            throw new InterruptedException("only read file");
+                        MDD_Scenario mdd_scenario = new MDD_Scenario(scenario);
 
-                    Auctioneer auctioneer = new Auctioneer();
-                    if (auctioneer.solve(mdd_scenario.getAgents())) {
-                        amount_solved.addOne();
-                    } else {
-                        amount_failed.addOne();
+                        Auctioneer auctioneer = new Auctioneer();
+                        if (auctioneer.solve(mdd_scenario.getAgents())) {
+                            amount_solved.addOne();
+                        } else {
+                            amount_failed.addOne();
+                        }
+                        //}
                     }
-                    //}
+                    currentThread.interrupt();
                 }
-                currentThread.interrupt();
             }
             catch (Exception e){
                 System.out.println("Interrupted");
