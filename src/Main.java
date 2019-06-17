@@ -21,7 +21,8 @@ public class Main {
         }
         System.out.println("----------------------");
 
-        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
+        List<Scenario> scenarios = Scenario_Reader.readScenariosBounded(new File("resources/scenarios/ca_cave.map.scen"),40);
+        System.out.println(scenarios.size());
         for(int i=0;i<scenarios.size();i=i+1){
             System.out.println(scenarios.get(i).getAgents().size());
             System.out.print(i+" : ");
