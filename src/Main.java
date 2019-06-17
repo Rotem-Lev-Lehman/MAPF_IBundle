@@ -86,7 +86,7 @@ public class Main {
             for (int i = 0; i < listOfFiles.length; i++) {
                 System.out.println("Reading file " + i);
                 File curr = listOfFiles[i];
-                List<Scenario> scenarios = Scenario_Reader.readScenarios(curr);
+                List<Scenario> scenarios = Scenario_Reader.readScenariosBounded(curr,10);
                 System.out.println("Done Reading file " + i);
 
                 for (Scenario scenario : scenarios) {
@@ -247,7 +247,7 @@ public class Main {
     }
 
     private void writeAmountSolvedAndFailed(List<Integer> amount_of_agents, List<Integer> amount_solved, List<Integer> amount_failed, List<Double> time) {
-        try (PrintWriter writer = new PrintWriter(new File("experiment_results4.csv"))) {
+        try (PrintWriter writer = new PrintWriter(new File("experiment_results5.csv"))) {
 
             StringBuilder sb = new StringBuilder();
             sb.append("amount of agents");
