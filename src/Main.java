@@ -1,12 +1,10 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 import java.util.concurrent.Semaphore;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Main {
 
@@ -67,7 +65,82 @@ public class Main {
         */
 
         Main main = new Main();
-        main.Experiment();
+        main.Experiment2();
+    }
+
+    private void Experiment2(){
+        File folder = new File("resources/scenarios");
+        File[] listOfFiles = folder.listFiles();
+
+        List<Integer> amount_of_agents_list = new ArrayList<>();
+        List<Integer> amount_solved_list = new ArrayList<>();
+        List<Integer> amount_failed_list = new ArrayList<>();
+        List<Double> time = new ArrayList<>();
+
+        for(int amount_of_agents = 2; amount_of_agents <= 10; amount_of_agents++) {
+
+            int amount_solved = 0;
+            int amount_failed = 0;
+            double curr_time = 0;
+
+            for (int i = 0; i < listOfFiles.length; i++) {
+                System.out.println("Reading file " + i);
+                File curr = listOfFiles[i];
+                List<Scenario> scenarios = Scenario_Reader.readScenarios(curr);
+                System.out.println("Done Reading file " + i);
+
+                for (Scenario scenario : scenarios) {
+                    MDD_Scenario mdd_scenario = new MDD_Scenario(scenario);
+                    Exp2Thread exp2Thread = new Exp2Thread(mdd_scenario, Thread.currentThread());
+                    Thread thread = new Thread(exp2Thread);
+                    double this_time = System.currentTimeMillis();
+                    thread.start();
+                    try {
+                        Thread.sleep(5000);
+
+                        amount_failed++;
+                        thread.interrupt();
+                        System.out.println("damn");
+                    } catch (InterruptedException e) {
+                        amount_solved++;
+                        System.out.println("yay");
+                        curr_time += System.currentTimeMillis() - this_time;
+                    }
+                }
+            }
+            amount_of_agents_list.add(amount_of_agents);
+            amount_solved_list.add(amount_solved);
+            amount_failed_list.add(amount_failed);
+            time.add(curr_time);
+        }
+        writeAmountSolvedAndFailed(amount_of_agents_list, amount_solved_list, amount_failed_list, time);
+    }
+
+    private class Exp2Thread implements Runnable{
+        private MDD_Scenario scenario;
+        private Thread prev;
+
+        public Exp2Thread(MDD_Scenario scenario, Thread thread) {
+            this.scenario = scenario;
+            this.prev = thread;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Auctioneer auctioneer = new Auctioneer();
+                if (auctioneer.solve(scenario.getAgents())) {
+                    prev.interrupt();
+                    return;
+                } else {
+                    Thread.sleep(10000);
+                }
+
+            }
+            catch (Exception e){
+                //System.out.println("Interrupted");
+            }
+        }
     }
 
     private void Experiment(){
@@ -114,7 +187,7 @@ public class Main {
             amount_failed_list.add(failed.getNum());
             */
         }
-        writeAmountSolvedAndFailed(agents, solved, failed);
+        //writeAmountSolvedAndFailed(agents, solved, failed);
     }
 
 
@@ -143,9 +216,9 @@ public class Main {
                 for (int scenIndex = 0; scenIndex < 40; scenIndex++) {
                     for (int i = 0; i < listOfFiles.length; i++) {
                         File curr = listOfFiles[i];
-                        List<Scenario> scenarios = Scenario_Reader.readBoundScenarios(curr, amount_of_agents.getNum(),1);
-                        //Scenario scenario = Scenario_Reader.readScenario(curr, scenIndex);
-                        Scenario scenario = scenarios.get(0);
+                        //List<Scenario> scenarios = Scenario_Reader.readBoundScenarios(curr, amount_of_agents.getNum(),1);
+                        Scenario scenario = Scenario_Reader.readScenarioAgentBound(curr, scenIndex, amount_of_agents.getNum());
+                        //Scenario scenario = scenarios.get(0);
                         //System.out.println(scenario.getAgents().size());
                         //for (Scenario scenario : scenarios) {
                         if (Thread.interrupted())
@@ -160,8 +233,8 @@ public class Main {
                         }
                         //}
                     }
-                    currentThread.interrupt();
                 }
+                currentThread.interrupt();
             }
             catch (Exception e){
                 System.out.println("Interrupted");
@@ -173,8 +246,8 @@ public class Main {
         }
     }
 
-    private void writeAmountSolvedAndFailed(List<MyInteger> amount_of_agents, List<MyInteger> amount_solved, List<MyInteger> amount_failed) {
-        try (PrintWriter writer = new PrintWriter(new File("experiment_results2.csv"))) {
+    private void writeAmountSolvedAndFailed(List<Integer> amount_of_agents, List<Integer> amount_solved, List<Integer> amount_failed, List<Double> time) {
+        try (PrintWriter writer = new PrintWriter(new File("experiment_results4.csv"))) {
 
             StringBuilder sb = new StringBuilder();
             sb.append("amount of agents");
@@ -182,6 +255,8 @@ public class Main {
             sb.append("amount solved");
             sb.append(',');
             sb.append("amount failed");
+            sb.append(',');
+            sb.append("time of success");
             sb.append('\n');
 
             for(int i = 0; i < amount_of_agents.size(); i++){
@@ -190,12 +265,15 @@ public class Main {
                 sb.append(amount_solved.get(i));
                 sb.append(',');
                 sb.append(amount_failed.get(i));
+                sb.append(',');
+                sb.append(time.get(i));
                 sb.append('\n');
 
                 System.out.println("***********************************************************************");
                 System.out.println("amount of agents = " + amount_of_agents.get(i));
                 System.out.println("amount solved = " + amount_solved.get(i));
                 System.out.println("amount failed = " + amount_failed.get(i));
+                System.out.println("time = " + time.get(i));
             }
 
 

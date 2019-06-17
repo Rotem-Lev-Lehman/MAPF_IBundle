@@ -45,7 +45,8 @@ public class Scenario_Reader {
                     }
                     counter =0;
                     if(map_file_name.equals(data[1])==false){
-                        graph = getGraph(data[1]);
+                        map_file_name = data[1];
+                        graph = getGraph(map_file_name);
                     }
                     agents = new ArrayList<>();
                 }
