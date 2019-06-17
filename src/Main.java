@@ -1,5 +1,8 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -24,7 +27,8 @@ public class Main {
         //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest1"));
         //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest3Agents1"));
         //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/aTest3Agents2"));
-        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
+        //List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
+        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cavern1_haunted.map.scen"));
 
         int breakpoint=5;
 
@@ -39,7 +43,7 @@ public class Main {
         */
         //*******************************************************************************************************************************
 
-        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(57));
+        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(0));
         /*
         MDD_Agent agent = mdd_scenario.getAgents().get(0);
         agent.calculateFirstMDD();
@@ -63,5 +67,31 @@ public class Main {
             System.out.println("Solver failed");
         }
 
+    }
+
+    private void Experiment(){
+        File folder = new File("resources/scenarios");
+        File[] listOfFiles = folder.listFiles();
+
+        for(int amount_of_agents = 0; amount_of_agents < 10; amount_of_agents++) {
+
+            int amount_solved = 0;
+            int amount_failed = 0;
+            for (int i = 0; i < listOfFiles.length; i++) {
+                File curr = listOfFiles[i];
+                List<Scenario> scenarios = Scenario_Reader.readScenarios(curr);
+
+                for (Scenario scenario : scenarios) {
+                    MDD_Scenario mdd_scenario = new MDD_Scenario(scenario);
+
+                    Auctioneer auctioneer = new Auctioneer();
+                    if (auctioneer.solve(mdd_scenario.getAgents())) {
+                        amount_solved++;
+                    } else {
+                        amount_failed++;
+                    }
+                }
+            }
+        }
     }
 }
