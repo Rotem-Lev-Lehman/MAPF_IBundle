@@ -66,6 +66,24 @@ public class Main {
 
         Main main = new Main();
         main.Experiment2();
+        //main.oneScenarioSolver();
+    }
+
+    private void oneScenarioSolver(){
+        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
+        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(5));
+        Auctioneer auctioneer = new Auctioneer();
+        try {
+            System.out.println("Starting!");
+            if(auctioneer.solve(mdd_scenario.getAgents())){
+                for(MDD_Agent agent1 : mdd_scenario.getAgents()){
+                    System.out.println("***************************************************************************");
+                    agent1.getFinal_path().printPath();
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void Experiment2(){
@@ -86,7 +104,7 @@ public class Main {
             for (int i = 0; i < listOfFiles.length; i++) {
                 System.out.println("Reading file " + i);
                 File curr = listOfFiles[i];
-                List<Scenario> scenarios = Scenario_Reader.readScenariosBounded(curr,10);
+                List<Scenario> scenarios = Scenario_Reader.readBoundScenarios(curr, amount_of_agents,10);
                 System.out.println("Done Reading file " + i);
 
                 for (Scenario scenario : scenarios) {

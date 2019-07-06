@@ -42,11 +42,13 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
 
             SearchingVertex curr = open.poll();
             //Vertex currVer = curr.getVertex();
+            if(curr.getF() > this.max_cost) // check for the nodes that are already in the open and then we found a better goal.
+                continue;
 
             if(curr.getVertex().equals(problem.getGoal_vertex())) {
                 if(!deepening){
-                    if(curr.getF()<=max_cost){
-                        max_cost=curr.getF();
+                    if(curr.getF()<=this.max_cost){
+                        this.max_cost=curr.getF();
                         finished.add(curr);
                     }
                     else{
@@ -69,7 +71,9 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
 
         }
 
-        return reconstructPaths();
+        //return reconstructPaths();
+        // TODO: 7/6/2019  Fix in the MDD Builder so that it will start from the goal and reconstract the paths while creating the MDD
+        return finished;
     }
 
     private void checkNeighbor(SearchingVertex prev, Vertex neighbor, double g) {

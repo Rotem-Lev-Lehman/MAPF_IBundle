@@ -10,10 +10,16 @@ public class Auctioneer {
     private List<Path> solutions;
 
     public boolean solve(List<MDD_Agent> agentsToSolve) throws InterruptedException {
+        int amount_of_agents = 0;
         for (MDD_Agent agent : agentsToSolve) {
+            System.out.println("Agent: " + amount_of_agents);
+            amount_of_agents++;
             agent.calculateFirstMDD();
         }
+        int counter = 0;
         while (true) {
+            System.out.println("Now starting iteration number: " + counter);
+            counter++;
             solutions = null;
             List<Bid> allBids = new ArrayList<>();
             for (MDD_Agent agent : agentsToSolve) {
@@ -192,7 +198,7 @@ public class Auctioneer {
         if (bidNum == bids.size()) {
             return recursive_Path_Combinations(agentsToSolve, bids, paths, time + 1, 0);
         }
-        for (MDD_Vertex neighbor : paths.get(bidNum).getLast().getNeighbores()) {
+        for (MDD_Vertex neighbor : paths.get(bidNum).getLast().getNeighbors()) {
             boolean conflict = false;
             for (int i = 0; i < bidNum; i++) {
                 if (paths.get(i).getLast().equals(neighbor)) {

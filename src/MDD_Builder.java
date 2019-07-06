@@ -27,8 +27,8 @@ public class MDD_Builder {
                 MDD_Vertex prev;// = new MDD_Vertex(prev_vertex,mdd,i-1,-1);
                 Vertex curr_vertex = curr_path.get(i);
                 //MDD_Vertex curr = new MDD_Vertex(curr_vertex, mdd, i, -1);
-                if (prev_vertexes.containsKey(prev_vertex)) {
-                    prev = prev_vertexes.get(prev_vertex);
+                prev = prev_vertexes.get(prev_vertex);
+                if (prev != null) {
                     if (!curr_vertexes.containsKey(curr_vertex)) {
                         double cost_until_me = prev.getCost_until_me();
                         if (curr_vertex.equals(prev_vertex)) {
@@ -50,7 +50,7 @@ public class MDD_Builder {
                     }
                     else{
                         MDD_Vertex curr_mdd_vertex = curr_vertexes.get(curr_vertex);
-                        if(!prev.getNeighbores().contains(curr_mdd_vertex)){
+                        if(!prev.checkIfNeighbor(curr_mdd_vertex)){
                             MDD_Edge mdd_edge = new MDD_Edge(prev, curr_mdd_vertex, mdd);
                             prev.addMDD_Edge(mdd_edge);
                             mdd.addMDD_Edge(mdd_edge);

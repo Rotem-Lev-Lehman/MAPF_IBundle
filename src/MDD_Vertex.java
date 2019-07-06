@@ -1,11 +1,10 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class MDD_Vertex {
     private Vertex original_vertex;
     private MDD mdd;
     private List<MDD_Edge> going_out_edges;
+    private HashMap<Vertex,MDD_Vertex> neighbors;
     private double cost_until_me;
     private int time;
 
@@ -15,6 +14,7 @@ public class MDD_Vertex {
         going_out_edges = new ArrayList<>();
         this.cost_until_me = cost_until_me;
         this.time = time;
+        this.neighbors = new HashMap<>();
     }
 
     public Vertex getOriginal_vertex() {
@@ -24,10 +24,11 @@ public class MDD_Vertex {
     public MDD getMdd() {
         return mdd;
     }
-
+    /*
     public List<MDD_Edge> getGoing_out_edges() {
         return going_out_edges;
     }
+    */
 
     public double getCost_until_me() {
         return cost_until_me;
@@ -35,18 +36,21 @@ public class MDD_Vertex {
 
     public void addMDD_Edge(MDD_Edge edge){
         going_out_edges.add(edge);
+        MDD_Vertex to = edge.getTo_MDD_vertex();
+        neighbors.put(to.original_vertex,to);
     }
 
     public int getTime() {
         return time;
     }
 
-    public List<MDD_Vertex> getNeighbores() {
-        List<MDD_Edge> edges = getGoing_out_edges();
-        List<MDD_Vertex> ans = new ArrayList<>();
-        for (MDD_Edge edge : edges)
-            ans.add(edge.getTo_MDD_vertex());
-        return ans;
+    public Collection<MDD_Vertex> getNeighbors(){
+        return neighbors.values();
+    }
+
+    public boolean checkIfNeighbor(MDD_Vertex to){
+        MDD_Vertex vertex = neighbors.get(to.original_vertex);
+        return to.equals(vertex);
     }
 
     @Override

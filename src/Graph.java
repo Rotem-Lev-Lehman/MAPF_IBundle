@@ -54,6 +54,13 @@ public class Graph {
 
     public Vertex get_Vertex_By_Indicator(Location_Indicator location_indicator) {
         Vertex ans = vertexes.get(location_indicator);
+        if(ans == null) {
+            try {
+                throw new Exception("The Point: " + location_indicator.toString() + " is not on the map!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         return ans;
     }
 
