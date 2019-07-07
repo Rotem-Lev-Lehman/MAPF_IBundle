@@ -71,9 +71,9 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
 
         }
 
-        //return reconstructPaths();
+        return reconstructPaths();
         // TODO: 7/6/2019  Fix in the MDD Builder so that it will start from the goal and reconstract the paths while creating the MDD
-        return finished;
+        //return finished;
     }
 
     private void checkNeighbor(SearchingVertex prev, Vertex neighbor, double g) {

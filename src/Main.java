@@ -65,22 +65,27 @@ public class Main {
         */
 
         Main main = new Main();
-        main.Experiment2();
-        //main.oneScenarioSolver();
+        //main.Experiment2();
+        main.oneScenarioSolver();
     }
 
     private void oneScenarioSolver(){
         List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
-        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(5));
+        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(4));
         Auctioneer auctioneer = new Auctioneer();
         try {
             System.out.println("Starting!");
+            long start = System.currentTimeMillis();
             if(auctioneer.solve(mdd_scenario.getAgents())){
                 for(MDD_Agent agent1 : mdd_scenario.getAgents()){
                     System.out.println("***************************************************************************");
                     agent1.getFinal_path().printPath();
                 }
             }
+            long finish = System.currentTimeMillis();
+            long timeElapsed = finish - start;
+            System.out.println("Done, time elapsed:");
+            System.out.println(timeElapsed);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
