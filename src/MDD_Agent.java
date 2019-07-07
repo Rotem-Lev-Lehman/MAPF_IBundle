@@ -43,8 +43,10 @@ public class MDD_Agent extends Agent {
     }
 
     public void calculateFirstMDD() throws InterruptedException {
-        List<Path> paths = searcher.search(this, graph.getMaxCostForPath());
-        MDD mdd = MDD_Builder.Build(graph, start_vertex, paths);
+        //List<Path> paths = searcher.search(this, graph.getMaxCostForPath());
+        List<SearchingVertex> vertices = searcher.search(this, graph.getMaxCostForPath());
+        //MDD mdd = MDD_Builder.Build(graph, start_vertex, paths);
+        MDD mdd = MDD_Builder.Build(graph, goal_vertex, vertices);
         current_MDDs.add(mdd);
     }
 
@@ -54,8 +56,10 @@ public class MDD_Agent extends Agent {
 
     public void calculateMoreMDDs() throws InterruptedException {
         double max = getMaxMDDTotalCost();
-        List<Path> paths = searcher.searchDeepening(this, max, max);
-        MDD mdd = MDD_Builder.Build(graph, start_vertex, paths);
+        //List<Path> paths = searcher.searchDeepening(this, max, max);
+        List<SearchingVertex> vertices = searcher.searchDeepening(this, max, max);
+        //MDD mdd = MDD_Builder.Build(graph, start_vertex, paths);
+        MDD mdd = MDD_Builder.Build(graph, goal_vertex, vertices);
         current_MDDs.add(mdd);
     }
 }

@@ -2,6 +2,7 @@ import java.util.*;
 
 public class MDD_Builder {
 
+    /*
     public static MDD Build(Graph graph, Vertex start, List<Path> paths) {
         if (paths.size() == 0)
             return null;
@@ -66,6 +67,82 @@ public class MDD_Builder {
             throw new UnsupportedOperationException("There can be only 1 goal state");
         }
         mdd.setGoal_MDD_vertex((MDD_Vertex)prev_vertexes.values().toArray()[0]);
+        mdd.setTotal_time(totalTime);
+        return mdd;
+    }
+    */
+
+    public static MDD Build(Graph graph, Vertex goal, List<SearchingVertex> goalVertexes) {
+        if (goalVertexes.size() == 0)
+            return null;
+        MDD mdd = new MDD(graph);
+
+        SearchingVertex tempGoal = goalVertexes.get(0);
+        double costForGoal = tempGoal.getG();
+        int totalTime = 0;
+        while (tempGoal != null){
+            totalTime++;
+            tempGoal = tempGoal.getPrev();
+        }
+
+        MDD_Vertex mdd_goal = new MDD_Vertex(goal, mdd, totalTime - 1, costForGoal);
+        HashMap<Vertex, MDD_Vertex> next_vertexes = new HashMap<>();
+        next_vertexes.put(goal, mdd_goal);
+
+        mdd.addMDD_Vertex(mdd_goal);
+        mdd.setGoal_MDD_vertex(mdd_goal);
+
+        for (int i = 0; i < goalVertexes.size(); i++){
+            SearchingVertex curr = goalVertexes.get(i);
+            if (curr.getG() != costForGoal)
+                throw new InputMismatchException("All goals must have the same G");
+            //goalVertexes.set(i, curr.getPrev());
+        }
+
+
+        for (int i = totalTime - 2; i >= 0; i--) {
+            HashMap<Vertex, MDD_Vertex> curr_vertexes = new HashMap<>();
+
+            for (int j = 0; j < goalVertexes.size(); j++) {
+                SearchingVertex next_searching_vertex = goalVertexes.get(j);
+                Vertex next_vertex = next_searching_vertex.getVertex();
+                MDD_Vertex next;// = new MDD_Vertex(prev_vertex,mdd,i-1,-1);
+                SearchingVertex curr_searching_vertex = next_searching_vertex.getPrev();
+                Vertex curr_vertex = curr_searching_vertex.getVertex();
+
+                next = next_vertexes.get(next_vertex);
+                if (next != null) {
+                    MDD_Vertex curr_mdd_vertex = curr_vertexes.get(curr_vertex);
+                    if (curr_mdd_vertex == null) {
+                        double cost_until_me = curr_searching_vertex.getG();
+
+                        curr_mdd_vertex = new MDD_Vertex(curr_vertex, mdd, i, cost_until_me);
+                        MDD_Edge mdd_edge = new MDD_Edge(curr_mdd_vertex, next, mdd);
+                        curr_mdd_vertex.addMDD_Edge(mdd_edge);
+                        mdd.addMDD_Vertex(curr_mdd_vertex);
+                        mdd.addMDD_Edge(mdd_edge);
+                        curr_vertexes.put(curr_vertex, curr_mdd_vertex);
+                    }
+                    else{
+                        if(!curr_mdd_vertex.checkIfNeighbor(next)){
+                            MDD_Edge mdd_edge = new MDD_Edge(curr_mdd_vertex, next, mdd);
+                            curr_mdd_vertex.addMDD_Edge(mdd_edge);
+                            mdd.addMDD_Edge(mdd_edge);
+                        }
+                    }
+                } else
+                    throw new UnsupportedOperationException();
+
+                goalVertexes.set(j, curr_searching_vertex);
+            }
+
+            next_vertexes = curr_vertexes;
+        }
+
+        if (next_vertexes.size() != 1) {
+            throw new UnsupportedOperationException("There can be only 1 start state");
+        }
+        mdd.setStart_MDD_vertex((MDD_Vertex)next_vertexes.values().toArray()[0]);
         mdd.setTotal_time(totalTime);
         return mdd;
     }

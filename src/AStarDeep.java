@@ -8,7 +8,7 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
     private List<SearchingVertex> finished;
 
     @Override
-    public List<Path> searchDeepening(AProblem problem, double minCost, double maxCost) throws InterruptedException {
+    public List<SearchingVertex> searchDeepening(AProblem problem, double minCost, double maxCost) throws InterruptedException {
         /*double costJump = problem.getGraph().getLowest_cost();
         for (double currCost = minCost; currCost <= maxCost; currCost += costJump) {
             List<Path> paths = searchBFS(problem, minCost,currCost,true);
@@ -20,12 +20,12 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
     }
 
     @Override
-    public List<Path> search(AProblem problem, double maxCost) throws InterruptedException {
+    public List<SearchingVertex> search(AProblem problem, double maxCost) throws InterruptedException {
         return searchBFS(problem,0,maxCost,false);
     }
 
 
-    private List<Path> searchBFS(AProblem problem, double min_cost, double max_cost, boolean deepening) throws InterruptedException {
+    private List<SearchingVertex> searchBFS(AProblem problem, double min_cost, double max_cost, boolean deepening) throws InterruptedException {
         this.problem = problem;
         this.max_cost = max_cost;
         open = new PriorityQueue<>();
@@ -52,7 +52,8 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
                         finished.add(curr);
                     }
                     else{
-                        return reconstructPaths();
+                        //return reconstructPaths();
+                        return finished;
                     }
                 }
                 else if(curr.getF()>=min_cost){
@@ -71,9 +72,8 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
 
         }
 
-        return reconstructPaths();
-        // TODO: 7/6/2019  Fix in the MDD Builder so that it will start from the goal and reconstract the paths while creating the MDD
-        //return finished;
+        //return reconstructPaths();
+        return finished;
     }
 
     private void checkNeighbor(SearchingVertex prev, Vertex neighbor, double g) {
