@@ -65,8 +65,8 @@ public class Main {
         */
 
         Main main = new Main();
-        //main.Experiment2();
-        main.oneScenarioSolver();
+        main.Experiment2();
+        //main.oneScenarioSolver();
     }
 
     private void oneScenarioSolver(){
@@ -270,7 +270,7 @@ public class Main {
     }
 
     private void writeAmountSolvedAndFailed(List<Integer> amount_of_agents, List<Integer> amount_solved, List<Integer> amount_failed, List<Double> time) {
-        try (PrintWriter writer = new PrintWriter(new File("experiment_results5.csv"))) {
+        try (PrintWriter writer = new PrintWriter(new File("experiment_results6.csv"))) {
 
             StringBuilder sb = new StringBuilder();
             sb.append("amount of agents");
