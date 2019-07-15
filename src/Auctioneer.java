@@ -18,7 +18,8 @@ public class Auctioneer {
         }
         int counter = 0;
         while (true) {
-            System.out.println("Now starting iteration number: " + counter);
+            if(counter>0)
+                System.out.println("Now starting iteration number: " + counter);
             counter++;
             solutions = null;
             List<Bid> allBids = new ArrayList<>();
@@ -48,6 +49,8 @@ public class Auctioneer {
                         for (int k = 0; k < bestBids.size(); k++) {
                             bestBids.get(k).Accept(solutions.get(k));
                         }
+                        if(counter>1)
+                            System.out.println(counter + " iterations");
                         return true;
                     } else {
                         for (int j = 0; j < agentsToSolve.size(); j++) {

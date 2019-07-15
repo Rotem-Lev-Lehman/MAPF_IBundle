@@ -113,6 +113,7 @@ public class Scenario_Reader {
     }
 
     private static Graph getGraph(String map_file_name){
+        //map_file_name = "complicated/" + map_file_name;
         int[][] map = Map_Reader.readMap(new File("resources/maps/" + map_file_name));
         Graph_Generator graph_generator=new Graph_Generator(map);
         return graph_generator.generate();

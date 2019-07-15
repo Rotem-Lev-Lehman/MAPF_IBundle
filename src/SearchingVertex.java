@@ -3,12 +3,22 @@ public class SearchingVertex implements Comparable{
     private SearchingVertex prev;
     private double g;
     private double h;
+    private int amountWaited;
 
     public SearchingVertex(Vertex vertex, SearchingVertex prev, double g, double h) {
         this.vertex = vertex;
         this.prev = prev;
         this.g = g;
         this.h = h;
+        this.amountWaited = 0;
+    }
+
+    public SearchingVertex(Vertex vertex, SearchingVertex prev, double g, double h,int amountWaited) {
+        this.vertex = vertex;
+        this.prev = prev;
+        this.g = g;
+        this.h = h;
+        this.amountWaited = amountWaited;
     }
 
     public SearchingVertex(Vertex vertex, double g, double h) {
@@ -50,5 +60,9 @@ public class SearchingVertex implements Comparable{
             return 1;
         }
         return 0;
+    }
+
+    public int getAmountWaited() {
+        return amountWaited;
     }
 }

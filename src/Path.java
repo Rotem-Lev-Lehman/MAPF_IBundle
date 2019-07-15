@@ -39,4 +39,8 @@ public class Path {
     public Vertex get(int index){
         return vertexes.get(index);
     }
+
+    public int getNumberOfSteps(){
+        return size()-1;
+    }
 }
