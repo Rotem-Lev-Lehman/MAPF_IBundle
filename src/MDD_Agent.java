@@ -57,7 +57,7 @@ public class MDD_Agent extends Agent {
     public void calculateMoreMDDs() throws InterruptedException {
         double max = getMaxMDDTotalCost();
         //List<Path> paths = searcher.searchDeepening(this, max, max);
-        List<SearchingVertex> vertices = searcher.searchDeepening(this, max, max);
+        List<SearchingVertex> vertices = searcher.searchDeepening(this, max, max, current_MDDs.size());
         //MDD mdd = MDD_Builder.Build(graph, start_vertex, paths);
         MDD mdd = MDD_Builder.Build(graph, goal_vertex, vertices);
         current_MDDs.add(mdd);

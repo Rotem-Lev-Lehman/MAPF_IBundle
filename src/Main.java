@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.Semaphore;
 
 public class Main {
@@ -66,21 +65,26 @@ public class Main {
 
         Main main = new Main();
         main.Experiment2();
-        //main.oneScenarioSolver();
+        //main.oneScenarioSolver("complicated/maze512-1-0");
     }
 
-    private void oneScenarioSolver(){
-        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
-        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(4));
+    private void oneScenarioSolver(String scenario_name){
+        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/"+scenario_name+".map.scen"));
+        MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(0));
         Auctioneer auctioneer = new Auctioneer();
         try {
             System.out.println("Starting!");
             long start = System.currentTimeMillis();
             if(auctioneer.solve(mdd_scenario.getAgents())){
+                int sumOfCosts =0;
                 for(MDD_Agent agent1 : mdd_scenario.getAgents()){
                     System.out.println("***************************************************************************");
-                    agent1.getFinal_path().printPath();
+                    Path path = agent1.getFinal_path();
+                    path.printPath();
+                    sumOfCosts += path.getNumberOfSteps();
                 }
+                System.out.print("-> ");
+                System.out.println(sumOfCosts);
             }
             long finish = System.currentTimeMillis();
             long timeElapsed = finish - start;
@@ -100,7 +104,7 @@ public class Main {
         List<Integer> amount_failed_list = new ArrayList<>();
         List<Double> time = new ArrayList<>();
 
-        for(int amount_of_agents = 2; amount_of_agents <= 10; amount_of_agents++) {
+        for(int amount_of_agents = 10; amount_of_agents <= 10; amount_of_agents++) {
 
             int amount_solved = 0;
             int amount_failed = 0;
@@ -109,24 +113,27 @@ public class Main {
             for (int i = 0; i < listOfFiles.length; i++) {
                 System.out.println("Reading file " + i);
                 File curr = listOfFiles[i];
-                List<Scenario> scenarios = Scenario_Reader.readBoundScenarios(curr, amount_of_agents,10);
+                if(curr.isFile() == false)
+                    continue;
+                List<Scenario> scenarios = Scenario_Reader.readScenarios(curr);
                 System.out.println("Done Reading file " + i);
-
-                for (Scenario scenario : scenarios) {
+                for (int j=13;j<scenarios.size();j++) {
+                    Scenario scenario = scenarios.get(j);
                     MDD_Scenario mdd_scenario = new MDD_Scenario(scenario);
                     Exp2Thread exp2Thread = new Exp2Thread(mdd_scenario, Thread.currentThread());
                     Thread thread = new Thread(exp2Thread);
                     double this_time = System.currentTimeMillis();
                     thread.start();
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(1000000000);
 
                         amount_failed++;
                         thread.interrupt();
-                        System.out.println("damn");
+                        System.out.println(j+" failed");
                     } catch (InterruptedException e) {
                         amount_solved++;
-                        System.out.println("yay");
+                        System.out.println("Completed "+j);
+                        //System.out.println("yay");
                         curr_time += System.currentTimeMillis() - this_time;
                     }
                 }
