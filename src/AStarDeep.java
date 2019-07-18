@@ -4,7 +4,7 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
 
     private PriorityQueue<SearchingVertex> open;
     private HashSet<Vertex> close;
-    //private HashMap<Vertex, Integer> amountForVertex;
+    private HashMap<Vertex, Double> minGForVertex;
     private double max_cost;
     private AProblem problem;
     private List<SearchingVertex> finished;
@@ -36,9 +36,12 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
         //amountForVertex = new HashMap<>();
         finished = new ArrayList<>();
         this.iterationMax = iterationMax;
+        this.minGForVertex = new HashMap<>();
 
         double h = problem.getHeuristic(problem.getStart_vertex());
         SearchingVertex first = new SearchingVertex(problem.getStart_vertex(),0, h);
+
+        this.minGForVertex.put(first.getVertex(), 0.0);
 
         addToOpen(first);
         while (!open.isEmpty()){
@@ -64,6 +67,21 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
                     finished.add(curr);
                 }
                 continue;
+            }
+
+            if(deepening){
+                Double minG = minGForVertex.get(curr.getVertex());
+                if(minG == null){
+                    minGForVertex.put(curr.getVertex(), curr.getG());
+                }
+                else{
+                    if(minG + iterationMax < curr.getG()) {
+                        continue;
+                    }
+                    else if(minG > curr.getG()) {
+                        minGForVertex.put(curr.getVertex(), curr.getG());
+                    }
+                }
             }
 
             double g;
@@ -101,11 +119,29 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
     }
 
     private void checkNeighbor(SearchingVertex prev, Vertex neighbor, double g, boolean deepening) {
-        int waiting = prev.getAmountWaited();
+        //int waiting = prev.getAmountWaited();
         if(!deepening) {
             if (close.contains(neighbor))
                 return;
         }
+        else {
+            Double minG = minGForVertex.get(neighbor);
+            if(minG != null){
+                if(minG + iterationMax < g)
+                    return;
+                else if(minG > g) {
+                    minGForVertex.put(neighbor, g);
+                    /*
+                    try {
+                        throw new Exception("Weird!");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    */
+                }
+            }
+        }
+        /*
         else{
             if (prev.getVertex().equals(neighbor)){
                 waiting++;
@@ -126,8 +162,9 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
                 return;
             }
         }
+        */
         double h = problem.getHeuristic(neighbor);
-        SearchingVertex vertex = new SearchingVertex(neighbor, prev, g, h,waiting);
+        SearchingVertex vertex = new SearchingVertex(neighbor, prev, g, h/*,waiting*/);
         addToOpen(vertex);
     }
 

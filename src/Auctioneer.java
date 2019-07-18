@@ -18,8 +18,8 @@ public class Auctioneer {
         }
         int counter = 0;
         while (true) {
-            if(counter>0)
-                System.out.println("Now starting iteration number: " + counter);
+            //if(counter>0)
+            System.out.println("Now starting iteration number: " + counter);
             counter++;
             solutions = null;
             List<Bid> allBids = new ArrayList<>();
