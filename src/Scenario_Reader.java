@@ -6,6 +6,57 @@ import java.util.List;
 
 public class Scenario_Reader {
 
+    public static Scenario readSceneNmap(File file){
+        int[][] array=null;
+        Graph graph=null;
+        List<Agent> agents=null;
+        FileReader fileReader=null;
+        BufferedReader bufferedReader=null;
+        try {
+            fileReader=new FileReader(file);
+            bufferedReader=new BufferedReader(fileReader);
+            bufferedReader.readLine();
+            bufferedReader.readLine();
+            String[] sizes=bufferedReader.readLine().split(",");
+            int height=Integer.parseInt(sizes[0]);
+            int width=Integer.parseInt(sizes[1]);
+            String nextLine;
+            array=new int[height][width];
+            int row=0;
+            while ((nextLine=bufferedReader.readLine())!=null && nextLine.startsWith("Agents")==false){
+                for(int column=0;column<width;column++){
+                    char symbol = nextLine.charAt(column);
+                    if(symbol == '@' || symbol == 'T'){
+                        array[row][column]=1;
+                    }
+                    else if(symbol == '.'){
+                        array[row][column]=0;
+                    }
+                }
+                row++;
+            }
+            Graph_Generator graph_generator = new Graph_Generator(array);
+            graph = graph_generator.generate();
+            int agentsNum = Integer.parseInt(bufferedReader.readLine());
+            int counter = 0;
+            agents = new ArrayList<>();
+            while((nextLine=bufferedReader.readLine())!=null && counter<agentsNum){
+                String[] data = nextLine.split(",");
+                Point start = new Point(Integer.parseInt(data[2]),Integer.parseInt(data[1]));
+                Point goal = new Point(Integer.parseInt(data[4]),Integer.parseInt(data[3]));
+                agents.add(new Agent(graph,graph.get_Vertex_By_Indicator(start),graph.get_Vertex_By_Indicator(goal)));
+                counter++;
+            }
+            fileReader.close();
+            bufferedReader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(array.length);
+            System.out.println(array[0].length);
+        }
+        return new Scenario(graph,agents);
+    }
+
     public static List<Scenario> readScenarios(File file){
         return readBoundScenarios(file,Integer.MAX_VALUE,Integer.MAX_VALUE) ;
     }

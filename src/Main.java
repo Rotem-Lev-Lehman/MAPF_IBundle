@@ -62,12 +62,16 @@ public class Main {
             System.out.println("Solver failed");
         }
         */
-
         Main main = new Main();
-        main.Experiment2();
+        main.main_Experiment();
+        //main.Experiment2();
+
         //main.oneScenarioSolver("complicated/maze512-1-0");
     }
 
+    private void main_Experiment(){
+        this.Experiment2("resources/instances_for_experiment",true);
+    }
     private void oneScenarioSolver(String scenario_name){
         List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/"+scenario_name+".map.scen"));
         MDD_Scenario mdd_scenario = new MDD_Scenario(scenarios.get(0));
@@ -95,8 +99,8 @@ public class Main {
         }
     }
 
-    private void Experiment2(){
-        File folder = new File("resources/scenarios");
+    private void Experiment2(String Path,boolean dorIntances){
+        File folder = new File(Path);
         File[] listOfFiles = folder.listFiles();
 
         List<Integer> amount_of_agents_list = new ArrayList<>();
@@ -115,9 +119,15 @@ public class Main {
                 File curr = listOfFiles[i];
                 if(curr.isFile() == false)
                     continue;
-                List<Scenario> scenarios = Scenario_Reader.readScenarios(curr);
+                List<Scenario> scenarios = new ArrayList<>();
+                if(dorIntances){
+                    scenarios.add(Scenario_Reader.readSceneNmap(curr));
+                }
+                else {
+                    scenarios = Scenario_Reader.readScenarios(curr);
+                }
                 System.out.println("Done Reading file " + i);
-                for (int j=13;j<scenarios.size();j++) {
+                for (int j=0;j<scenarios.size();j++) {
                     Scenario scenario = scenarios.get(j);
                     MDD_Scenario mdd_scenario = new MDD_Scenario(scenario);
                     Exp2Thread exp2Thread = new Exp2Thread(mdd_scenario, Thread.currentThread());
@@ -125,7 +135,9 @@ public class Main {
                     double this_time = System.currentTimeMillis();
                     thread.start();
                     try {
-                        Thread.sleep(1000000000);
+                        int minutes = 1;
+                        int seconds = 0;
+                        Thread.sleep((minutes*60+seconds)*1000);
 
                         amount_failed++;
                         thread.interrupt();
