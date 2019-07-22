@@ -76,7 +76,7 @@ public class MDD_Builder {
         if (goalVertexes.size() == 0)
             return null;
         MDD mdd = new MDD(graph);
-
+/*
         SearchingVertex tempGoal = goalVertexes.get(0);
         double costForGoal = tempGoal.getG();
         int totalTime = 0;
@@ -143,7 +143,7 @@ public class MDD_Builder {
             throw new UnsupportedOperationException("There can be only 1 start state");
         }
         mdd.setStart_MDD_vertex((MDD_Vertex)next_vertexes.values().toArray()[0]);
-        mdd.setTotal_time(totalTime);
+        mdd.setTotal_time(totalTime);*/
         return mdd;
     }
 
