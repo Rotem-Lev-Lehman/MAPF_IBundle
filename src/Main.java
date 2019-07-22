@@ -63,11 +63,30 @@ public class Main {
         }
         */
         Main main = new Main();
-        double time = System.currentTimeMillis();
+        /*double time = System.currentTimeMillis();
         main.main_Experiment();
-        System.out.println((System.currentTimeMillis()-time)/3600+" minutes");
-        //main.Experiment2();
+        System.out.println((System.currentTimeMillis()-time)/3600+" minutes");*/
+        //main.Experiment2("resources/scenarios",false);
+        List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
+        Graph graph = scenarios.get(0).getGraph();
+        Agent agent = new Agent(graph,graph.get_Vertex_By_Indicator(new Point(82,164)),graph.get_Vertex_By_Indicator(new Point(95,207)));
+        Agent agent1 = new Agent(graph,graph.get_Vertex_By_Indicator(new Point(82,164)),graph.get_Vertex_By_Indicator(new Point(116,164)));
+        AStarDeep aStarDeep = new AStarDeep();
+        try {
+            List<SearchingVertex> aaa = aStarDeep.search(agent,100);
+            double solution = aaa.get(0).getG();
 
+            System.out.println(solution);
+            System.out.println(aaa.size());
+            /*List<SearchingVertex> aaa1 = aStarDeep.searchDeepening(agent,solution,solution,0);
+            double solution1 = aaa1.get(0).getG();
+            System.out.println(solution1);
+            System.out.println(aaa1.size());*/
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         //main.oneScenarioSolver("complicated/maze512-1-0");
     }
 
