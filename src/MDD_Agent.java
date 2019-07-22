@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MDD_Agent extends Agent {
-    
+
+
     private AStarDeep searcher;
     private List<MDD> current_MDDs;
 

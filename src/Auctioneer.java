@@ -3,6 +3,7 @@ import java.util.List;
 
 public class Auctioneer {
 
+
     private int makespan;
     private double highestProfit;
     private List<MDD_Agent> bestList;
