@@ -63,12 +63,4 @@ public class MDD_Agent extends Agent {
         MDD mdd = MDD_Builder.Build(graph, goal_vertex, vertices);
         current_MDDs.add(mdd);
     }
-
-    public void runSpecial() {
-        try {
-            List<SearchingVertex> vertices = searcher.searchDeepening(this, 64, 64, 0);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 }
