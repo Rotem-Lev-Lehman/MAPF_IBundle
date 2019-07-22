@@ -63,7 +63,9 @@ public class Main {
         }
         */
         Main main = new Main();
+        double time = System.currentTimeMillis();
         main.main_Experiment();
+        System.out.println((System.currentTimeMillis()-time)/3600+" minutes");
         //main.Experiment2();
 
         //main.oneScenarioSolver("complicated/maze512-1-0");
