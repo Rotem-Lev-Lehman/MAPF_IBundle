@@ -4,7 +4,6 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
 
     private PriorityQueue<SearchingVertex> open;
     //private HashSet<Vertex> close;
-    private HashMap<Vertex, Double> minGForVertex;
     private HashMap<Vertex, SearchingVertex> vertexes;
     private double max_cost;
     private AProblem problem;
@@ -22,20 +21,53 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
     }
 
 
-    private List<SearchingVertex> searchBFS(AProblem problem, double cost, boolean deepening, int iterationMax) throws InterruptedException {
-        this.problem = problem;
+
+    public SearchingVertex Astar(AProblem problem,double cost) throws InterruptedException {
         this.max_cost = cost;
+        this.problem = problem;
         open = new PriorityQueue<>();
-        finished = new ArrayList<>();
-        this.iterationMax = iterationMax;
-        this.minGForVertex = new HashMap<>();
+        SearchingVertex answer = null;
         this.vertexes = new HashMap<>();
 
         double h = problem.getHeuristic(problem.getStart_vertex());
         SearchingVertex first = new SearchingVertex(problem.getStart_vertex(), 0, h);
         this.vertexes.put(first.getVertex(), first);
 
-        this.minGForVertex.put(first.getVertex(), 0.0);
+        addToOpen(first);
+        while (!open.isEmpty()) {
+            if (Thread.interrupted())
+                throw new InterruptedException("Auctioneer was interrupted");
+
+            SearchingVertex curr = open.poll();
+            if (curr.getF() > this.max_cost) // check for the nodes that are already in the open and then we found a better goal.
+                return answer;
+            if (curr.getVertex().equals(problem.getGoal_vertex())) {
+                if (curr.getF() <= this.max_cost) {
+                    this.max_cost = curr.getF();
+                    answer=curr;
+                }
+                continue;
+            }
+            for (Edge edge : curr.getVertex().getEdges()) {
+                Vertex neighbor = edge.getVertex_to();
+                double g = curr.getG() + edge.getTravel_cost();
+                checkNeighbor(curr, neighbor, g, false);
+            }
+        }
+        return answer;
+    }
+
+    private List<SearchingVertex> searchBFS(AProblem problem, double cost, boolean deepening, int iterationMax) throws InterruptedException {
+        this.problem = problem;
+        this.max_cost = cost;
+        open = new PriorityQueue<>();
+        finished = new ArrayList<>();
+        this.iterationMax = iterationMax;
+        this.vertexes = new HashMap<>();
+
+        double h = problem.getHeuristic(problem.getStart_vertex());
+        SearchingVertex first = new SearchingVertex(problem.getStart_vertex(), 0, h);
+        this.vertexes.put(first.getVertex(), first);
 
         addToOpen(first);
         while (!open.isEmpty()) {
@@ -82,21 +114,23 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
     private void checkNeighbor(SearchingVertex prev, Vertex neighbor, double newG, boolean deepening) {
         double h = problem.getHeuristic(neighbor);
         SearchingVertex next = vertexes.get(neighbor);
-        if(newG+h>max_cost+iterationMax)
+        if(newG+h>max_cost)
             return;
         if(next != null){
-            if(next.getG() == newG || next.getG() + iterationMax == newG){
-                next.addPrev(prev,prev.getG());
-                addToOpen(next);
+            if(next.getG()+iterationMax<newG)
+                return;
+            if(next.getG() == newG){
+                next.addPrev(prev,newG);
             }
             else if(!deepening){
-                if(next.getG() + iterationMax > newG){
+                if(next.getG()> newG){
                     next.newBestPrev(prev,prev.getG(),newG);
                     addToOpen(next);
                 }
             }
             else{
                 if(next.getG() + iterationMax >= newG){
+                    next.addPrev(prev,newG);
                     addToOpen(next);
                 }
 
