@@ -51,16 +51,12 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
             SearchingVertex curr = open.poll();
             //Vertex currVer = curr.getVertex();
             if(curr.getF() > this.max_cost) // check for the nodes that are already in the open and then we found a better goal.
-                continue;
+                return finished;
             if(curr.getVertex().equals(problem.getGoal_vertex())) {
                 if(!deepening){
                     if(curr.getF()<=this.max_cost){
                         this.max_cost=curr.getF();
                         finished.add(curr);
-                    }
-                    else{
-                        //return reconstructPaths();
-                        return finished;
                     }
                 }
                 else if(curr.getF()>=min_cost){
@@ -68,8 +64,9 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
                 }
                 continue;
             }
-
+/*
             if(deepening){
+
                 Double minG = minGForVertex.get(curr.getVertex());
                 if(minG == null){
                     minGForVertex.put(curr.getVertex(), curr.getG());
@@ -83,7 +80,7 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
                     }
                 }
             }
-
+*/
             double g;
             for(Edge edge : curr.getVertex().getEdges()){
                 Vertex neighbor = edge.getVertex_to();
@@ -119,52 +116,31 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
     }
 
     private void checkNeighbor(SearchingVertex prev, Vertex neighbor, double g, boolean deepening) {
-        //int waiting = prev.getAmountWaited();
         if(!deepening) {
             if (close.contains(neighbor))
                 return;
         }
         else {
             Double minG = minGForVertex.get(neighbor);
-            if(minG != null){
-                if(minG + iterationMax < g)
+            if(minG == null){
+                minGForVertex.put(neighbor, g);
+            }
+            else{
+                if(minG + iterationMax < g) {
                     return;
+                }
                 else if(minG > g) {
                     minGForVertex.put(neighbor, g);
-                    /*
                     try {
                         throw new Exception("Weird!");
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    */
                 }
             }
         }
-        /*
-        else{
-            if (prev.getVertex().equals(neighbor)){
-                waiting++;
-            }
-            else {
-                SearchingVertex tmp = prev.getPrev();
-                int counter = 1;
-                while (tmp != null){
-                    counter++;
-                    if(tmp.getVertex().equals(neighbor)){
-                        waiting += counter;
-                        break;
-                    }
-                    tmp=tmp.getPrev();
-                }
-            }
-            if(this.iterationMax < waiting){
-                return;
-            }
-        }
-        */
         double h = problem.getHeuristic(neighbor);
-        SearchingVertex vertex = new SearchingVertex(neighbor, prev, g, h/*,waiting*/);
+        SearchingVertex vertex = new SearchingVertex(neighbor, prev, g, h);
         addToOpen(vertex);
     }
 
