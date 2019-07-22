@@ -14,7 +14,10 @@ public class Auctioneer {
         for (MDD_Agent agent : agentsToSolve) {
             System.out.println("Agent: " + amount_of_agents);
             amount_of_agents++;
-            agent.calculateFirstMDD();
+            //agent.calculateFirstMDD();
+            if(amount_of_agents == 5){
+                agent.runSpecial();
+            }
         }
         int counter = 0;
         while (true) {
