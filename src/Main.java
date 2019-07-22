@@ -1,11 +1,15 @@
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
 public class Main {
+
+    private HashSet testList = new HashSet();
 
     public static void main(String[] args) {
         /*
@@ -69,25 +73,43 @@ public class Main {
         //main.Experiment2("resources/scenarios",false);
         List<Scenario> scenarios = Scenario_Reader.readScenarios(new File("resources/scenarios/ca_cave.map.scen"));
         Graph graph = scenarios.get(0).getGraph();
-        Agent agent = new Agent(graph,graph.get_Vertex_By_Indicator(new Point(82,164)),graph.get_Vertex_By_Indicator(new Point(95,207)));
-        Agent agent1 = new Agent(graph,graph.get_Vertex_By_Indicator(new Point(82,164)),graph.get_Vertex_By_Indicator(new Point(116,164)));
+        //Agent agent = new Agent(graph,graph.get_Vertex_By_Indicator(new Point(82,164)),graph.get_Vertex_By_Indicator(new Point(95,207)));
+        Agent agent = new Agent(graph,graph.get_Vertex_By_Indicator(new Point(82,164)),graph.get_Vertex_By_Indicator(new Point(83,164)));
+        Agent agent1 = new Agent(graph,graph.get_Vertex_By_Indicator(new Point(82,164)),graph.get_Vertex_By_Indicator(new Point(110,164)));
         AStarDeep aStarDeep = new AStarDeep();
         try {
-            List<SearchingVertex> aaa = aStarDeep.search(agent,100);
-            double solution = aaa.get(0).getG();
-
-            System.out.println(solution);
-            System.out.println(aaa.size());
-            /*List<SearchingVertex> aaa1 = aStarDeep.searchDeepening(agent,solution,solution,0);
-            double solution1 = aaa1.get(0).getG();
-            System.out.println(solution1);
-            System.out.println(aaa1.size());*/
+            List<SearchingVertex> Astar = aStarDeep.search(agent,100);
+            double solution = main.printRes(Astar);
+            System.out.println("-------------");
+            List<SearchingVertex> deep = aStarDeep.searchDeepening(agent,solution+2,2);
+            main.printRes(deep);
 
         }
         catch (Exception e){
             e.printStackTrace();
         }
         //main.oneScenarioSolver("complicated/maze512-1-0");
+    }
+
+    private double printRes(List<SearchingVertex> list){
+        double solution = list.get(0).getG();
+        System.out.println("Solution path length: " + solution);
+        System.out.println("Expect to be 1 -> " + list.size());
+        System.out.println("Number of posible paths: " + list.get(0).getNumberOfPaths());
+        return solution;
+    }
+
+    private void checkPaths(SearchingVertex searchingVertex,HashSet<SearchingVertex> list) {
+        if(list.contains(searchingVertex)){
+            System.out.println();
+        }
+        else{
+            list.add(searchingVertex);
+        }
+        for(SearchingVertex vertex:searchingVertex.getPrevList().keySet()){
+            HashSet<SearchingVertex> list1 = new HashSet<>(list);
+            checkPaths(vertex,list1);
+        }
     }
 
     private void main_Experiment(){

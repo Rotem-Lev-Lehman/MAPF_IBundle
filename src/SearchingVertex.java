@@ -1,59 +1,62 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class SearchingVertex implements Comparable{
     private Vertex vertex;
-    //private SearchingVertex prev;
-    private List<SearchingVertex> prevList;
+    private HashMap<SearchingVertex,Double> prevList;
     private List<SearchingVertex> nextList;
     private double g;
     private double h;
     private int amountWaited;
+    private int potentionalWait;
 
-    public SearchingVertex(Vertex vertex, SearchingVertex prev, double g, double h) {
-        this.vertex = vertex;
-        //this.prev = prev;
-        this.prevList = new ArrayList<>();
-        this.nextList = new ArrayList<>();
-        addPrev(prev);
+    public SearchingVertex(Vertex vertex,double g, double h, SearchingVertex prev,double prevG) {
+        init(vertex);
+        addPrev(prev,prevG);
         this.g = g;
         this.h = h;
         this.amountWaited = 0;
     }
 
-    public SearchingVertex(Vertex vertex, SearchingVertex prev, double g, double h,int amountWaited) {
-        this.vertex = vertex;
-        //this.prev = prev;
-        this.prevList = new ArrayList<>();
-        this.nextList = new ArrayList<>();
-        addPrev(prev);
+    public SearchingVertex(Vertex vertex,double g, double h,int potentionalWait, SearchingVertex prev, double prevG) {
+        init(vertex);
+        addPrev(prev,prevG);
         this.g = g;
         this.h = h;
-        this.amountWaited = amountWaited;
+        this.potentionalWait = potentionalWait;
     }
 
     public SearchingVertex(Vertex vertex, double g, double h) {
-        this.vertex = vertex;
-        //this.prev = null;
-        this.prevList = new ArrayList<>();
-        this.nextList = new ArrayList<>();
+        init(vertex);
         this.g = g;
         this.h = h;
+    }
+
+    private void init(Vertex vertex){
+        this.vertex = vertex;
+        this.prevList = new HashMap<>();
+        this.nextList = new ArrayList<>();
+        this.potentionalWait = 0;
     }
 
     public Vertex getVertex() {
         return vertex;
     }
 
-    public List<SearchingVertex> getPrevList() {
+    public HashMap<SearchingVertex,Double> getPrevList() {
         return this.prevList;
     }
 
-    public void addPrev(SearchingVertex prev){
-        if(prevList.contains(prev)==false){
-            this.prevList.add(prev);
+    public void addPrev(SearchingVertex prev,double prevG){
+        if(prevList.containsKey(prev)==false){
+            this.prevList.put(prev,prevG);
             prev.addNext(this);
+        }
+        else {
+            if(prevList.get(prev)>prevG)
+                this.prevList.put(prev,prevG);
         }
     }
 
@@ -106,14 +109,39 @@ public class SearchingVertex implements Comparable{
         return amountWaited;
     }
 
-    public void newBestPrev(SearchingVertex prev,double newG){
+    // TODO: 22-Jul-19 check
+    public void newBestPrev(SearchingVertex prev,double prevG,double newG){
         if(newG < this.g){
             prevList.clear();
-            prevList.add(prev);
+            prevList.put(prev,prevG);
             this.g = newG;
             for(SearchingVertex vertex:nextList){
-                vertex.newBestPrev(this,g+1);
+                vertex.newBestPrev(this,g,g+1);
             }
         }
+    }
+
+    public int getNumberOfPaths(){
+        if(prevList.size()==0/* || ( prevList.size()==1 && prevList.keySet().iterator().next().equals(this))*/)
+            return 1;
+        int sum=0;
+        for (SearchingVertex vertex:prevList.keySet()){
+            if(vertex.equals(this)==false){
+                sum+=vertex.getNumberOfPaths();
+            }
+        }
+        return sum;
+    }
+
+    public void addPotentionalWait(){
+        potentionalWait++;
+        for (SearchingVertex vertex:nextList) {
+            if(vertex.equals(this)==false)
+                vertex.addPotentionalWait();
+        }
+    }
+
+    public int getPotentionalWait() {
+        return potentionalWait;
     }
 }

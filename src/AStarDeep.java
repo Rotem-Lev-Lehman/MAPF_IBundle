@@ -12,29 +12,20 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
     private int iterationMax;
 
     @Override
-    public List<SearchingVertex> searchDeepening(AProblem problem, double minCost, double maxCost, int iterationMax) throws InterruptedException {
-        /*double costJump = problem.getGraph().getLowest_cost();
-        for (double currCost = minCost; currCost <= maxCost; currCost += costJump) {
-            List<Path> paths = searchBFS(problem, minCost,currCost,true);
-            if(paths != null)
-                return paths;
-        }
-        return null; //There is no more*/
-        return searchBFS(problem, minCost, maxCost, true, iterationMax);
+    public List<SearchingVertex> searchDeepening(AProblem problem, double cost,int iterationMax) throws InterruptedException {
+        return searchBFS(problem,cost,true, iterationMax);
     }
 
     @Override
     public List<SearchingVertex> search(AProblem problem, double maxCost) throws InterruptedException {
-        return searchBFS(problem, 0, maxCost, false, 0);
+        return searchBFS(problem, maxCost, false, 0);
     }
 
 
-    private List<SearchingVertex> searchBFS(AProblem problem, double min_cost, double max_cost, boolean deepening, int iterationMax) throws InterruptedException {
+    private List<SearchingVertex> searchBFS(AProblem problem, double cost, boolean deepening, int iterationMax) throws InterruptedException {
         this.problem = problem;
-        this.max_cost = max_cost;
+        this.max_cost = cost;
         open = new PriorityQueue<>();
-        //close = new HashSet<>();
-        //amountForVertex = new HashMap<>();
         finished = new ArrayList<>();
         this.iterationMax = iterationMax;
         this.minGForVertex = new HashMap<>();
@@ -61,96 +52,62 @@ public class AStarDeep implements ISearcher, IDeepening_Searcher {
                         this.max_cost = curr.getF();
                         finished.add(curr);
                     }
-                } else if (curr.getF() >= min_cost) {
+                } else if (curr.getF() + curr.getPotentionalWait() >= cost) {
                     finished.add(curr);
                 }
                 continue;
             }
-/*
-            if(deepening){
-
-                Double minG = minGForVertex.get(curr.getVertex());
-                if(minG == null){
-                    minGForVertex.put(curr.getVertex(), curr.getG());
-                }
-                else{
-                    if(minG + iterationMax < curr.getG()) {
-                        continue;
-                    }
-                    else if(minG > curr.getG()) {
-                        minGForVertex.put(curr.getVertex(), curr.getG());
-                    }
-                }
-            }
-*/
             for (Edge edge : curr.getVertex().getEdges()) {
                 Vertex neighbor = edge.getVertex_to();
                 double g = curr.getG() + edge.getTravel_cost();
                 checkNeighbor(curr, neighbor, g, deepening);
             }
-            if (!deepening) {
-                //close.add(curr.getVertex());
-            } else {
-                double g = curr.getG() + curr.getVertex().getStay_cost();
-                checkNeighbor(curr, curr.getVertex(), g, deepening);
+            if (deepening) {
+                addMySelf(curr);
+                /*double g = curr.getG() + curr.getVertex().getStay_cost();
+                checkNeighbor(curr, curr.getVertex(), g, deepening);*/
             }
         }
-
-        //return reconstructPaths();
         return finished;
     }
 
-    private void checkNeighbor(SearchingVertex prev, Vertex neighbor, double g, boolean deepening) {
-        /*
-        if(!deepening) {
-            if (close.contains(neighbor))
-                return;
+    private void addMySelf(SearchingVertex curr) {
+        if(curr.getF() + curr.getPotentionalWait() <= max_cost){
+            open.add(curr);
+            curr.addPotentionalWait();
+            curr.addPrev(curr,curr.getG()+curr.getVertex().getStay_cost());
         }
-        else {
-        */
-        Double minG = minGForVertex.get(neighbor);
-        if (minG == null) {
-            minGForVertex.put(neighbor, g);
-        } else {
-            if (minG + iterationMax < g) {
-                return;
-            } else if (minG > g) {
-                minGForVertex.put(neighbor, g);
-            }
-        }
-        //}
+    }
+
+    private void checkNeighbor(SearchingVertex prev, Vertex neighbor, double newG, boolean deepening) {
         double h = problem.getHeuristic(neighbor);
         SearchingVertex next = vertexes.get(neighbor);
+        if(newG+h>max_cost+iterationMax)
+            return;
         if(next != null){
-            if(next.getG() == g){
-                next.addPrev(prev);
+            if(next.getG() == newG || next.getG() + iterationMax == newG){
+                next.addPrev(prev,prev.getG());
+                addToOpen(next);
             }
-            else if(next.getG() > g && !deepening){
-                next.newBestPrev(prev,g);
+            else if(!deepening){
+                if(next.getG() + iterationMax > newG){
+                    next.newBestPrev(prev,prev.getG(),newG);
+                    addToOpen(next);
+                }
+            }
+            else{
+                if(next.getG() + iterationMax >= newG){
+                    addToOpen(next);
+                }
+
             }
         }
         else {
-            SearchingVertex vertex = new SearchingVertex(neighbor, prev, g, h);
+            SearchingVertex vertex = new SearchingVertex(neighbor,newG, h,prev.getPotentionalWait(), prev, prev.getG());
             vertexes.put(vertex.getVertex(),vertex);
             addToOpen(vertex);
         }
     }
-
-    /*
-    private List<Path> reconstructPaths() {
-        List<Path> paths = new ArrayList<>();
-        for(SearchingVertex vertex : finished){
-            Path path = new Path();
-            SearchingVertex curr = vertex;
-            while (curr != null){
-                path.addFromStart(curr.getVertex());
-                curr = curr.getPrev();
-            }
-            paths.add(path);
-        }
-        return paths;
-    }
-    */
 
     private void addToOpen(SearchingVertex vertex) {
         if (vertex.getF() <= max_cost)
